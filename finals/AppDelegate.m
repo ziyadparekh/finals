@@ -8,16 +8,176 @@
 
 #import "AppDelegate.h"
 
-@interface AppDelegate ()
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+
+#import <Reachability/Reachability.h>
+#import <MBProgressHUD/MBProgressHUD.h>
+#import <Parse/Parse.h>
+#import <ParseFacebookUtilsV4.h>
+#import "ParseCrashReporting.h"
+#import "ZPWelcomeViewController.h"
+#import "ZPHomeViewController.h"
+#import "ZPActivityViewController.h"
+#import "ZPAccountViewController.h"
+#import "UIColor+ZPColors.h"
+
+@interface AppDelegate () {
+    BOOL firstLaunch;
+}
+
+@property (strong, nonatomic) ZPWelcomeViewController *welcomeViewController;
+@property (strong, nonatomic) ZPHomeViewController *homeViewController;
+@property (strong, nonatomic) ZPAccountViewController *accountViewController;
+@property (strong, nonatomic) ZPActivityViewController *activityViewController;
+
+@property (strong, nonatomic) MBProgressHUD *hud;
+
+- (void)setupAppearance;
 
 @end
+
 
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    // **************************************************************************
+    // Parse initialization
+    [ParseCrashReporting enable];
+    [Parse setApplicationId:@"qoyosuJnY2TGESNruabPOIWiEWLPDgmEMF9uwjxo" clientKey:@"RwNlapUUmrZNCBDNs4AWQ8DqKeCohSOju0FHv9SD"];
+    [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
+    // **************************************************************************
+    
+    // Track app open
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    
+    PFACL *defaultAcl = [PFACL ACL];
+    // Enable public read access by default with any newly created PFObjects belonging to current user
+    [defaultAcl setPublicReadAccess:YES];
+    [PFACL setDefaultACL:defaultAcl withAccessForCurrentUser:YES];
+    
+    [self setupAppearance];
+    
+    // TODO::
+    // Use Reachability to monitor connectivity
+    // [self monitorReachability]
+    
+    self.welcomeViewController = [[ZPWelcomeViewController alloc] init];
+    
+    self.navController = [[UINavigationController alloc] initWithRootViewController:self.welcomeViewController];
+    self.navController.navigationBarHidden = YES;
+    
+    self.window.rootViewController = self.navController;
+    [self.window makeKeyAndVisible];
+    
     return YES;
+}
+
+- (void)presentTabBarController {
+    self.tabBarController = [[ZPTabBarController alloc] init];
+    self.homeViewController = [[ZPHomeViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.accountViewController = [[ZPAccountViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.activityViewController = [[ZPActivityViewController alloc] initWithStyle:UITableViewStylePlain];
+    
+    UINavigationController *homeNavigationController = [[UINavigationController alloc] initWithRootViewController:self.homeViewController];
+    UINavigationController *activityNavigationController = [[UINavigationController alloc] initWithRootViewController:self.activityViewController];
+    UINavigationController *settingsNavigationController = [[UINavigationController alloc] init];
+    UINavigationController *emptyNavigationController = [[UINavigationController alloc] init];
+    UINavigationController *profileNavigationController = [[UINavigationController alloc] initWithRootViewController:self.accountViewController];
+    
+    UITabBarItem *homeTabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Home", @"Home") image:[[UIImage imageNamed:@"ActivityFeedDefault.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"ActivityFeedSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    
+    UITabBarItem *profileTabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Profile", @"Profile") image:[[UIImage imageNamed:@"ProfileDefault"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"ProfileSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    
+    UITabBarItem *activityTabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Notifications", @"Notifications") image:[[UIImage imageNamed:@"NotificationsDefault.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"NotificationsSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    
+    UITabBarItem *settingsTabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Settings", @"Settings") image:[[UIImage imageNamed:@"SettingsDefault.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"SettingsSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+
+    [homeNavigationController setTabBarItem:homeTabBarItem];
+    [activityNavigationController setTabBarItem:activityTabBarItem];
+    [profileNavigationController setTabBarItem:profileTabBarItem];
+    [settingsNavigationController setTabBarItem:settingsTabBarItem];
+    
+    self.tabBarController.delegate = self;
+    self.tabBarController.viewControllers = @[ homeNavigationController, activityNavigationController, emptyNavigationController, profileNavigationController, settingsNavigationController ];
+    
+    [self.navController setViewControllers:@[ self.welcomeViewController, self.tabBarController ] animated:NO];
+    
+}
+
+// Set appearance parameters to achieve custom look and feel
+- (void)setupAppearance {
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
+    [[UINavigationBar appearance] setTintColor:[UIColor zp_lightBlueColor]];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor zp_venmoBlueColor]];
+    
+    [[UINavigationBar appearance] setTitleTextAttributes:@{
+                                                           NSForegroundColorAttributeName: [UIColor whiteColor]
+                                                           }];
+    
+    [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil]
+     setTitleColor:[UIColor whiteColor]
+     forState:UIControlStateNormal];
+    
+    [[UIBarButtonItem appearance] setTitleTextAttributes:@{
+                                                           NSForegroundColorAttributeName:[UIColor whiteColor]
+                                                           }
+                                                forState:UIControlStateNormal];
+    
+    [[UISearchBar appearance] setTintColor:[UIColor zp_greyColor]];
+    
+}
+
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
+    // The empty UITabBarItem behind our camera button should not load a view controller
+    return ![viewController isEqual:tabBarController.viewControllers[ZPEmptyTabBarItemIndex]];
+}
+
+- (BOOL)isParseReachable {
+    return self.networkStatus != NotReachable;
+}
+
+- (void)presentLoginViewController:(BOOL)animated {
+    [self.welcomeViewController presentLoginViewController:animated];
+}
+
+- (void)presentLoginViewController {
+    [self presentLoginViewController:YES];
+}
+
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    return [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                          openURL:url
+                                                sourceApplication:sourceApplication
+                                                       annotation:annotation];
+}
+
+- (void)logOut {
+    // clear cache
+    //[[PAPCache sharedCache] clear];
+    
+    // Clear all caches
+    [PFQuery clearAllCachedResults];
+    
+    // Log out
+    [PFUser logOut];
+    [FBSDKAccessToken setCurrentAccessToken:nil];
+    
+    [self.navController popToRootViewControllerAnimated:NO];
+    
+    [self presentLoginViewController];
+    
+    self.homeViewController = nil;
+    self.accountViewController = nil;
+    self.activityViewController = nil;
+    
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -36,6 +196,8 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+    [FBSDKAppEvents activateApp];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
