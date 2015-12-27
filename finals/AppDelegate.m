@@ -130,6 +130,8 @@
                                                            }
                                                 forState:UIControlStateNormal];
     
+    [[UITextView appearance] setTintColor:[UIColor zp_venmoBlueColor]];
+    
     [[UISearchBar appearance] setTintColor:[UIColor zp_greyColor]];
     
 }
