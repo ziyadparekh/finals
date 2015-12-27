@@ -67,6 +67,8 @@
 		873461811C2E146500A1B90D /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 873461801C2E146500A1B90D /* UIImage+ImageEffects.m */; };
 		873461841C2E2DFD00A1B90D /* UIColor+ZPColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 873461831C2E2DFD00A1B90D /* UIColor+ZPColors.m */; };
 		873461861C2E4CEE00A1B90D /* FriendsIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 873461851C2E4CEE00A1B90D /* FriendsIcon.png */; };
+		8734618C1C2F421E00A1B90D /* ZPUserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8734618B1C2F421E00A1B90D /* ZPUserTableViewCell.m */; };
+		8734618F1C2F444800A1B90D /* ZPProfileImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8734618E1C2F444800A1B90D /* ZPProfileImageView.m */; };
 		876BDFB216CF5128263E038C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 248CE5B63E18913EE5FDC572 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -163,6 +165,10 @@
 		873461821C2E2DFD00A1B90D /* UIColor+ZPColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+ZPColors.h"; sourceTree = "<group>"; };
 		873461831C2E2DFD00A1B90D /* UIColor+ZPColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+ZPColors.m"; sourceTree = "<group>"; };
 		873461851C2E4CEE00A1B90D /* FriendsIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FriendsIcon.png; sourceTree = "<group>"; };
+		8734618A1C2F421E00A1B90D /* ZPUserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPUserTableViewCell.h; sourceTree = "<group>"; };
+		8734618B1C2F421E00A1B90D /* ZPUserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPUserTableViewCell.m; sourceTree = "<group>"; };
+		8734618D1C2F444800A1B90D /* ZPProfileImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPProfileImageView.h; sourceTree = "<group>"; };
+		8734618E1C2F444800A1B90D /* ZPProfileImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPProfileImageView.m; sourceTree = "<group>"; };
 		C547E95395F8D54B8E2A1361 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -238,6 +244,7 @@
 		873460C61C2CDE3200A1B90D /* finals */ = {
 			isa = PBXGroup;
 			children = (
+				873461881C2F41C100A1B90D /* views */,
 				873461871C2F182600A1B90D /* compose */,
 				873461641C2DE20B00A1B90D /* activity */,
 				8734615D1C2DDF7B00A1B90D /* account */,
@@ -384,6 +391,25 @@
 				8734617B1C2E0DBA00A1B90D /* ZPComposeViewController.m */,
 			);
 			name = compose;
+			sourceTree = "<group>";
+		};
+		873461881C2F41C100A1B90D /* views */ = {
+			isa = PBXGroup;
+			children = (
+				873461891C2F41CA00A1B90D /* UITableViewCells */,
+				8734618D1C2F444800A1B90D /* ZPProfileImageView.h */,
+				8734618E1C2F444800A1B90D /* ZPProfileImageView.m */,
+			);
+			name = views;
+			sourceTree = "<group>";
+		};
+		873461891C2F41CA00A1B90D /* UITableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				8734618A1C2F421E00A1B90D /* ZPUserTableViewCell.h */,
+				8734618B1C2F421E00A1B90D /* ZPUserTableViewCell.m */,
+			);
+			name = UITableViewCells;
 			sourceTree = "<group>";
 		};
 		F5DDC92F02028E4B43BD6C15 /* Frameworks */ = {
@@ -583,6 +609,8 @@
 				873460D01C2CDE3200A1B90D /* finals.xcdatamodeld in Sources */,
 				873461401C2DCC6F00A1B90D /* ZPUtility.m in Sources */,
 				873461551C2DDF2800A1B90D /* ZPHomeViewController.m in Sources */,
+				8734618F1C2F444800A1B90D /* ZPProfileImageView.m in Sources */,
+				8734618C1C2F421E00A1B90D /* ZPUserTableViewCell.m in Sources */,
 				873461671C2DE22500A1B90D /* ZPActivityViewController.m in Sources */,
 				873461811C2E146500A1B90D /* UIImage+ImageEffects.m in Sources */,
 			);

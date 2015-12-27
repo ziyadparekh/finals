@@ -11,8 +11,13 @@
 @implementation ZPConstants
 
 #pragma mark - User Class
+
+NSString *const kZPUserClass                                   = @"_User";
+
 // Field keys
+NSString *const kZPUserIdKey                                   = @"objectId";
 NSString *const kZPUserDisplayNameKey                          = @"displayName";
+NSString *const kZPUserLowercaseNameKey                        = @"lowercaseName";
 NSString *const kZPUserFacebookIDKey                           = @"facebookId";
 NSString *const kZPUserPhotoIDKey                              = @"photoId";
 NSString *const kZPUserProfilePicSmallKey                      = @"profilePictureSmall";

@@ -77,6 +77,7 @@
     
     if (![[PFUser currentUser] objectForKey:kZPUserBalanceKey]) {
         [[PFUser currentUser] setObject:[NSNumber numberWithFloat:0.00f] forKey:kZPUserBalanceKey];
+        [[PFUser currentUser] setObject:[[[PFUser currentUser] objectForKey:kZPUserDisplayNameKey] lowercaseString] forKey:kZPUserLowercaseNameKey];
     }
     
     [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {

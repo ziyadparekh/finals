@@ -18,8 +18,13 @@ typedef enum {
 @interface ZPConstants : NSObject
 
 #pragma mark - PFObject User Class
+
+extern NSString *const kZPUserClass;
+
 // Field keys
+extern NSString *const kZPUserIdKey;
 extern NSString *const kZPUserDisplayNameKey;
+extern NSString *const kZPUserLowercaseNameKey;
 extern NSString *const kZPUserFacebookIDKey;
 extern NSString *const kZPUserPhotoIDKey;
 extern NSString *const kZPUserProfilePicSmallKey;
