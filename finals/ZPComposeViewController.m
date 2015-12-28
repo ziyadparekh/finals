@@ -271,7 +271,10 @@
 }
 
 - (void)tokenFieldDidBeginEditing:(VENTokenField * __nonnull)tokenField {
-    //self.tableView.hidden = NO;
+    self.tableView.frame = CGRectMake(0.0f, self.navigationController.navigationBar.frame.size.height + 20.0f + self.tokenField.bounds.size.height, self.view.bounds.size.width, self.view.bounds.size.height - (self.navigationController.navigationBar.frame.size.height + 20.0f + self.tokenField.bounds.size.height));
+    self.tableView.hidden = NO;
+    self.noteTextView.hidden = YES;
+    self.calcInputTextField.hidden = YES;
 }
 
 - (void)setDismissTableViewButtonIfNeccessary {
@@ -287,11 +290,7 @@
     if ([text length] == 0) {
         return;
     }
-    self.tableView.frame = CGRectMake(0.0f, self.navigationController.navigationBar.frame.size.height + 20.0f + self.tokenField.bounds.size.height, self.view.bounds.size.width, self.view.bounds.size.height - (self.navigationController.navigationBar.frame.size.height + 20.0f + self.tokenField.bounds.size.height));
-    self.tableView.hidden = NO;
-    self.noteTextView.hidden = YES;
-    self.calcInputTextField.hidden = YES;
-    
+
     [self setDismissTableViewButtonIfNeccessary];
     
     PFQuery *searchQuery = [PFQuery queryWithClassName:kZPUserClass];
@@ -376,12 +375,12 @@
     } else {
         [self.selectedNames addObject:aUser];
     }
-    
+    [self.tokenField reloadData];
+    [self.tokenField collapse];
+
     self.tableView.hidden = YES;
     self.noteTextView.hidden = NO;
     self.calcInputTextField.hidden = NO;
-    [self.tokenField reloadData];
-    [self.tokenField collapse];
 }
 
 - (BOOL)doesArray:(NSMutableArray *)array ContainItem:(NSString *)item {
