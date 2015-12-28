@@ -13,6 +13,39 @@
 
 @implementation ZPUtility
 
+#pragma mark - Transactions
+
++ (void)submitTransaction:(PFObject *)transaction toUserInBackground:(PFUser *)user block:(void (^)(BOOL, NSError *))completionBlock {
+    if ([[user objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+        return;
+    }
+    
+    PFObject *transactionActivity = [PFObject objectWithClassName:kZPTransactionKey];
+    [transactionActivity setObject:[PFUser currentUser] forKey:kZPTransactionFromUserKey];
+    [transactionActivity setObject:user forKey:kZPTransactionToUserKey];
+    [transactionActivity setObject:kZPTransactionPaymentKey forKey:kZPTransactionTypeKey];
+    [transactionActivity setObject:[transaction objectForKey:kZPTransactionAmountKey] forKey:kZPTransactionAmountKey];
+    [transactionActivity setObject:[transaction objectForKey:kZPTransactionNoteKey] forKey:kZPTransactionNoteKey];
+    
+    PFACL *transactionAcl = [PFACL ACLWithUser:[PFUser currentUser]];
+    [transactionAcl setPublicReadAccess:YES];
+    [transactionAcl setWriteAccess:YES forUser:[PFUser currentUser]];
+    transactionActivity.ACL = transactionAcl;
+    
+    [transactionActivity saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (completionBlock) {
+            completionBlock(succeeded, error);
+        }
+    }];
+    
+}
+
++ (void)submitTransaction:(PFObject *)transaction toUsers:(NSArray *)users block:(void (^)(BOOL, NSError *))completionBlock {
+    for (PFUser *user in users) {
+        [ZPUtility submitTransaction:transaction toUserInBackground:user block:completionBlock];
+    }
+}
+
 #pragma mark - Facebook
 
 + (void)processFacebookProfilePictureData:(NSData *)newProfilePictureData {

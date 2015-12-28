@@ -29,7 +29,22 @@ NSString *const kZPUserAutoFollowKey                           = @"autoFollow";
 NSString *const kZPUserBalanceKey                              = @"balance";
 
 #pragma mark - Transaction Class
-NSString *const kZPUserTransactionsKey                         = @"transactions";
+
+NSString *const kZPTransactionKey                              = @"Transactions";
+
+// Field keys
+NSString *const kZPTransactionAmountKey                        = @"amount";
+NSString *const kZPTransactionNoteKey                          = @"note";
+NSString *const kZPTransactionFromUserKey                      = @"fromUser";
+NSString *const kZPTransactionToUserKey                        = @"toUser";
+NSString *const kZPTransactionCreatedAtKey                     = @"createdAt";
+NSString *const kZPTransactionTypeKey                          = @"type";
+NSString *const kZPTransactionPaymentKey                       = @"payment";
+NSString *const kZPTransactionCashOutKey                       = @"cashOut";
+
+
+#pragma mark - TransactionObject Class
+NSString *const kZPTransactionObjectKey                        = @"TransactionObject";
 
 
 #pragma mark - Photo Class

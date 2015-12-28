@@ -36,7 +36,20 @@ extern NSString *const kZPUserAutoFollowKey;
 extern NSString *const kZPUserBalanceKey;
 
 #pragma mark - Transactions Class
-extern NSString *const kZPUserTransactionsKey;
+extern NSString *const kZPTransactionKey;
+
+// Field keys
+extern NSString *const kZPTransactionAmountKey;
+extern NSString *const kZPTransactionNoteKey;
+extern NSString *const kZPTransactionFromUserKey;
+extern NSString *const kZPTransactionToUserKey;
+extern NSString *const kZPTransactionCreatedAtKey;
+extern NSString *const kZPTransactionTypeKey;
+extern NSString *const kZPTransactionPaymentKey;
+extern NSString *const kZPTransactionCashOutKey;
+
+#pragma mark = TransactionObject Class
+extern NSString *const kZPTransactionObjectKey;
 
 #pragma mark - PFObject Photo Class
 // Class key

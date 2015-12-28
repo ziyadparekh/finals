@@ -11,9 +11,11 @@
 #import <VENCalculatorInputView/VENCalculatorInputTextField.h>
 #import <Parse/Parse.h>
 #import "ZPConstants.h"
+#import "ZPUtility.h"
 #import "ZPUserTableViewCell.h"
 #import "UIColor+ZPColors.h"
 #import <UITextView+Placeholder/UITextView+Placeholder.h>
+#import <MBProgressHUD/MBProgressHUD.h>
 
 @interface ZPComposeViewController () <VENTokenFieldDelegate, VENTokenFieldDataSource, UITableViewDataSource, UITableViewDelegate, ZPUserTableViewCellDelegate, UITextViewDelegate, VENCalculatorInputViewDelegate, UITextFieldDelegate>
 
@@ -27,6 +29,9 @@
 @property (strong, nonatomic) NSMutableArray *names;
 @property (strong, nonatomic) NSMutableArray *selectedNames;
 @property (assign, nonatomic) float keyboardHeight;
+@property (assign, nonatomic) NSUInteger _expectedTransactionsCount;
+@property (assign, nonatomic) NSUInteger _processedTransactionsCount;
+
 @end
 
 @implementation ZPComposeViewController
@@ -40,6 +45,8 @@
 @synthesize noteTextView;
 @synthesize names;
 @synthesize keyboardHeight;
+@synthesize _expectedTransactionsCount;
+@synthesize _processedTransactionsCount;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -135,7 +142,37 @@
 }
 
 - (void)submitTransaction:(id)sender {
+    self.confirmButtonView.enabled = NO;
+    self.navigationItem.leftBarButtonItem.enabled = NO;
     
+    [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
+    
+    _expectedTransactionsCount = self.selectedNames.count;
+    _processedTransactionsCount = 0;
+    
+    PFObject *transaction = [PFObject objectWithClassName:kZPTransactionObjectKey];
+    [transaction setObject:self.noteTextView.text forKey:kZPTransactionNoteKey];
+    [transaction setObject:self.calcInputTextField.text forKey:kZPTransactionAmountKey];
+    
+    [[PFUser currentUser] fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (error) {
+            NSLog(@"error fetching current user information");
+            return;
+        }
+        NSLog(@"fetched latest for current user...");
+        [ZPUtility submitTransaction:transaction toUsers:self.selectedNames block:^(BOOL succeeded, NSError *error) {
+            _processedTransactionsCount++;
+            if (error) {
+                NSLog(@"error processing transaction for %@", [self.selectedNames[_processedTransactionsCount] objectId]);
+                return;
+            } else {
+                if (_processedTransactionsCount == _expectedTransactionsCount) {
+                    [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
+                    [self cancelButtonAction:self];
+                }
+            }
+        }];
+    }];
 }
 
 - (void)validatePaymentAction:(id)sender {
@@ -157,14 +194,13 @@
 - (void)formatConfirmButtonTitle {
     NSString *formattedText = @"";
     if (self.selectedNames.count == 1) {
-        PFObject *recipient = self.selectedNames[0];
+        PFUser *recipient = self.selectedNames[0];
         float amount = [self.calcInputTextField.text floatValue];
         formattedText = [NSString stringWithFormat:@"Pay %@ Rs%.02f", [recipient objectForKey:kZPUserDisplayNameKey], amount];
     } else {
         NSUInteger numberOfRecipients = self.selectedNames.count;
         float amount = [self.calcInputTextField.text floatValue];
-        float totalValue = amount * numberOfRecipients;
-        formattedText = [NSString stringWithFormat:@"Pay %lu people Rs%.02f", (unsigned long)numberOfRecipients, totalValue];
+        formattedText = [NSString stringWithFormat:@"Pay %lu people Rs%.02f", (unsigned long)numberOfRecipients, amount];
     }
     [self.confirmButtonView setTitle:formattedText forState:UIControlStateNormal];
     self.confirmButtonView.titleLabel.font = [UIFont boldSystemFontOfSize:14];
@@ -199,8 +235,14 @@
 }
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
+    self.payButtonView.hidden = NO;
+    self.confirmButtonView.hidden = YES;
     self.noteTextView.inputAccessoryView = self.accessoryView;
     return YES;
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    [self.tokenField collapse];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -211,6 +253,10 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     [self setRightBarButtonItemToTotalAmount];
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    [self.tokenField collapse];
 }
 
 #pragma mark - VENTokenFieldDelegate
@@ -335,6 +381,7 @@
     self.noteTextView.hidden = NO;
     self.calcInputTextField.hidden = NO;
     [self.tokenField reloadData];
+    [self.tokenField collapse];
 }
 
 - (BOOL)doesArray:(NSMutableArray *)array ContainItem:(NSString *)item {
@@ -359,7 +406,7 @@
 #pragma mark - VENTokenFieldDataSource
 
 - (NSString *)tokenField:(VENTokenField *)tokenField titleForTokenAtIndex:(NSUInteger)index {
-    PFObject *object = self.selectedNames[index];
+    PFUser *object = self.selectedNames[index];
     return [object objectForKey:kZPUserDisplayNameKey];
 }
 
@@ -382,7 +429,16 @@
 }
 
 - (NSString *)tokenFieldCollapsedText:(VENTokenField *)tokenField {
-    return [NSString stringWithFormat:@"%tu people", [self.selectedNames count]];
+    NSUInteger count = self.selectedNames.count;
+    if (count == 0) {
+        return @"";
+    } else if (count == 1) {
+        PFObject *user = self.selectedNames[0];
+        NSString *name = [ZPUtility firstNameForDisplayName:[user objectForKey:kZPUserDisplayNameKey]];
+        return name;
+    } else {
+        return [NSString stringWithFormat:@"%tu people", [self.selectedNames count]];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

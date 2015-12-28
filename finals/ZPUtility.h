@@ -12,6 +12,9 @@
 
 @interface ZPUtility : NSObject
 
++ (void)submitTransaction:(PFObject *)transaction toUserInBackground:(PFUser *)user block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
++ (void)submitTransaction:(PFObject *)transaction toUsers:(NSArray *)users block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
+
 + (void)processFacebookProfilePictureData:(NSData *)data;
 
 + (BOOL)userHasValidFacebookData:(PFUser *)user;
