@@ -17,7 +17,7 @@
 #import "ParseCrashReporting.h"
 #import "ZPWelcomeViewController.h"
 #import "ZPHomeViewController.h"
-#import "ZPActivityViewController.h"
+#import "ZPActivityFeedViewController.h"
 #import "ZPAccountViewController.h"
 #import "UIColor+ZPColors.h"
 
@@ -28,7 +28,7 @@
 @property (strong, nonatomic) ZPWelcomeViewController *welcomeViewController;
 @property (strong, nonatomic) ZPHomeViewController *homeViewController;
 @property (strong, nonatomic) ZPAccountViewController *accountViewController;
-@property (strong, nonatomic) ZPActivityViewController *activityViewController;
+@property (strong, nonatomic) ZPActivityFeedViewController *activityViewController;
 
 @property (strong, nonatomic) MBProgressHUD *hud;
 
@@ -82,7 +82,7 @@
     self.tabBarController = [[ZPTabBarController alloc] init];
     self.homeViewController = [[ZPHomeViewController alloc] initWithStyle:UITableViewStylePlain];
     self.accountViewController = [[ZPAccountViewController alloc] initWithStyle:UITableViewStylePlain];
-    self.activityViewController = [[ZPActivityViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.activityViewController = [[ZPActivityFeedViewController alloc] initWithStyle:UITableViewStylePlain];
     
     UINavigationController *homeNavigationController = [[UINavigationController alloc] initWithRootViewController:self.homeViewController];
     UINavigationController *activityNavigationController = [[UINavigationController alloc] initWithRootViewController:self.activityViewController];

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8715DE551C3202F000B6D507 /* ZPBaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8715DE541C3202F000B6D507 /* ZPBaseTableViewCell.m */; };
+		8715DE581C32154700B6D507 /* ZPActivityTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8715DE571C32154700B6D507 /* ZPActivityTableViewCell.m */; };
+		8715DE5B1C32215100B6D507 /* ZPActivityFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8715DE5A1C32215100B6D507 /* ZPActivityFeedViewController.m */; };
 		873460CA1C2CDE3200A1B90D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 873460C91C2CDE3200A1B90D /* main.m */; };
 		873460CD1C2CDE3200A1B90D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 873460CC1C2CDE3200A1B90D /* AppDelegate.m */; };
 		873460D01C2CDE3200A1B90D /* finals.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 873460CE1C2CDE3200A1B90D /* finals.xcdatamodeld */; };
@@ -53,7 +56,6 @@
 		873461551C2DDF2800A1B90D /* ZPHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 873461541C2DDF2800A1B90D /* ZPHomeViewController.m */; };
 		873461591C2DDF4B00A1B90D /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 873461581C2DDF4B00A1B90D /* TableViewController.m */; };
 		873461631C2DE1CD00A1B90D /* ZPAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 873461621C2DE1CD00A1B90D /* ZPAccountViewController.m */; };
-		873461671C2DE22500A1B90D /* ZPActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 873461661C2DE22500A1B90D /* ZPActivityViewController.m */; };
 		8734616A1C2DE6A900A1B90D /* NotificationsDefault.png in Resources */ = {isa = PBXBuildFile; fileRef = 873461681C2DE6A900A1B90D /* NotificationsDefault.png */; };
 		8734616B1C2DE6A900A1B90D /* NotificationsSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 873461691C2DE6A900A1B90D /* NotificationsSelected.png */; };
 		8734616F1C2DE74100A1B90D /* ProfileSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 8734616D1C2DE74100A1B90D /* ProfileSelected.png */; };
@@ -85,6 +87,12 @@
 /* Begin PBXFileReference section */
 		248CE5B63E18913EE5FDC572 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		778E6E8793F77075E3957A30 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		8715DE531C3202F000B6D507 /* ZPBaseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPBaseTableViewCell.h; sourceTree = "<group>"; };
+		8715DE541C3202F000B6D507 /* ZPBaseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPBaseTableViewCell.m; sourceTree = "<group>"; };
+		8715DE561C32154700B6D507 /* ZPActivityTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPActivityTableViewCell.h; sourceTree = "<group>"; };
+		8715DE571C32154700B6D507 /* ZPActivityTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPActivityTableViewCell.m; sourceTree = "<group>"; };
+		8715DE591C32215100B6D507 /* ZPActivityFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPActivityFeedViewController.h; sourceTree = "<group>"; };
+		8715DE5A1C32215100B6D507 /* ZPActivityFeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPActivityFeedViewController.m; sourceTree = "<group>"; };
 		873460C41C2CDE3200A1B90D /* finals.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = finals.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		873460C81C2CDE3200A1B90D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		873460C91C2CDE3200A1B90D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -147,8 +155,6 @@
 		873461581C2DDF4B00A1B90D /* TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
 		873461611C2DE1CD00A1B90D /* ZPAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPAccountViewController.h; sourceTree = "<group>"; };
 		873461621C2DE1CD00A1B90D /* ZPAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPAccountViewController.m; sourceTree = "<group>"; };
-		873461651C2DE22500A1B90D /* ZPActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPActivityViewController.h; sourceTree = "<group>"; };
-		873461661C2DE22500A1B90D /* ZPActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPActivityViewController.m; sourceTree = "<group>"; };
 		873461681C2DE6A900A1B90D /* NotificationsDefault.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NotificationsDefault.png; sourceTree = "<group>"; };
 		873461691C2DE6A900A1B90D /* NotificationsSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NotificationsSelected.png; sourceTree = "<group>"; };
 		8734616D1C2DE74100A1B90D /* ProfileSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProfileSelected.png; sourceTree = "<group>"; };
@@ -378,8 +384,8 @@
 		873461641C2DE20B00A1B90D /* activity */ = {
 			isa = PBXGroup;
 			children = (
-				873461651C2DE22500A1B90D /* ZPActivityViewController.h */,
-				873461661C2DE22500A1B90D /* ZPActivityViewController.m */,
+				8715DE591C32215100B6D507 /* ZPActivityFeedViewController.h */,
+				8715DE5A1C32215100B6D507 /* ZPActivityFeedViewController.m */,
 			);
 			name = activity;
 			sourceTree = "<group>";
@@ -408,6 +414,10 @@
 			children = (
 				8734618A1C2F421E00A1B90D /* ZPUserTableViewCell.h */,
 				8734618B1C2F421E00A1B90D /* ZPUserTableViewCell.m */,
+				8715DE531C3202F000B6D507 /* ZPBaseTableViewCell.h */,
+				8715DE541C3202F000B6D507 /* ZPBaseTableViewCell.m */,
+				8715DE561C32154700B6D507 /* ZPActivityTableViewCell.h */,
+				8715DE571C32154700B6D507 /* ZPActivityTableViewCell.m */,
 			);
 			name = UITableViewCells;
 			sourceTree = "<group>";
@@ -608,10 +618,12 @@
 				8734610B1C2CE3EE00A1B90D /* ZPTabBarController.m in Sources */,
 				873460D01C2CDE3200A1B90D /* finals.xcdatamodeld in Sources */,
 				873461401C2DCC6F00A1B90D /* ZPUtility.m in Sources */,
+				8715DE5B1C32215100B6D507 /* ZPActivityFeedViewController.m in Sources */,
 				873461551C2DDF2800A1B90D /* ZPHomeViewController.m in Sources */,
+				8715DE581C32154700B6D507 /* ZPActivityTableViewCell.m in Sources */,
 				8734618F1C2F444800A1B90D /* ZPProfileImageView.m in Sources */,
 				8734618C1C2F421E00A1B90D /* ZPUserTableViewCell.m in Sources */,
-				873461671C2DE22500A1B90D /* ZPActivityViewController.m in Sources */,
+				8715DE551C3202F000B6D507 /* ZPBaseTableViewCell.m in Sources */,
 				873461811C2E146500A1B90D /* UIImage+ImageEffects.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

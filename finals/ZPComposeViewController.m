@@ -187,7 +187,6 @@
         [alertView show];
     } else {
         [self formatConfirmButtonTitle];
-        NSLog(@"ALL GOOD");
     }
 }
 

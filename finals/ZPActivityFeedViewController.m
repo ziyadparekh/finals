@@ -1,18 +1,19 @@
 //
-//  ZPActivityViewController.m
+//  ZPActivityFeedViewController.m
 //  finals
 //
-//  Created by Ziyad Parekh on 12/25/15.
+//  Created by Ziyad Parekh on 12/28/15.
 //  Copyright (c) 2015 Ziyad Parekh. All rights reserved.
 //
 
-#import "ZPActivityViewController.h"
+#import "ZPActivityFeedViewController.h"
+#import "ZPConstants.h"
 
-@interface ZPActivityViewController ()
+@interface ZPActivityFeedViewController ()
 
 @end
 
-@implementation ZPActivityViewController
+@implementation ZPActivityFeedViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -22,6 +23,18 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - PAPActivityFeedViewController
+
++ (NSString *)stringForActivityType:(NSString *)activityType {
+    if ([activityType isEqualToString:kZPTransactionCashOutKey]) {
+        return NSLocalizedString(@"cashed out", nil);
+    } else if ([activityType isEqualToString:kZPTransactionPaymentKey]) {
+        return NSLocalizedString(@"paid", nil);
+    } else {
+        return nil;
+    }
 }
 
 /*
