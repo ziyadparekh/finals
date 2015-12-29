@@ -32,6 +32,7 @@
 /*! The cell's views. These shouldn't be modified but need to be exposed for the subclass */
 @property (nonatomic, strong) UIView *mainView;
 @property (nonatomic, strong) UIButton *nameButton;
+@property (nonatomic, strong) UIButton *toNameButton;
 @property (nonatomic, strong) UIButton *avatarImageButton;
 @property (nonatomic, strong) ZPProfileImageView *avatarImageView;
 @property (nonatomic, strong) UILabel *contentLabel;
@@ -51,6 +52,8 @@
 /*! Static Helper methods */
 + (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content;
 + (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content cellInsetWidth:(CGFloat)cellInset;
++ (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content noteString:(NSString *)note cellInsetWidth:(CGFloat)cellInset;
++ (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content noteString:(NSString *)note;
 + (NSString *)padString:(NSString *)string withFont:(UIFont *)font toWidth:(CGFloat)width;
 
 @end
@@ -61,13 +64,13 @@
 
 #define horiBorderSpacing 8.0f
 #define horiBorderSpacingBottom 9.0f
-#define horiElemSpacing 5.0f
+#define horiElemSpacing 8.0f
 
-#define vertTextBorderSpacing 10.0f
+#define vertTextBorderSpacing 5.0f
 
-#define avatarX horiBorderSpacing
-#define avatarY vertBorderSpacing
-#define avatarDim 33.0f
+#define avatarX 0.0f
+#define avatarY 0.0f
+#define avatarDim 42.0f
 
 #define nameX avatarX+avatarDim+horiElemSpacing
 #define nameY vertTextBorderSpacing

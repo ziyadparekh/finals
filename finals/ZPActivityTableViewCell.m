@@ -12,20 +12,21 @@
 #import "ZPProfileImageView.h"
 #import "ZPConstants.h"
 #import "ZPUtility.h"
+#import "UIColor+ZPColors.h"
 
 static TTTTimeIntervalFormatter *timeFormatter;
 
 @interface ZPActivityTableViewCell ()
 
 /*! Private view components */
-@property (nonatomic, strong) ZPProfileImageView *activityImageView;
-@property (nonatomic, strong) UIButton *activityImageButton;
+@property (nonatomic, strong) UILabel *amountLabel;
+@property (nonatomic, strong) UILabel *noteLabel;
 
 /*! Flag to remove the right-hand side image if not necessary */
-@property (nonatomic) BOOL hasActivityImage;
+@property (nonatomic) BOOL hasAmount;
 
 /*! Private setter for the right-hand side image */
-- (void)setActivityImageFile:(PFFile *)image;
+- (void)setTransactionAmount:(NSString *)amount;
 
 /*! Button touch handler for activity image button overlay */
 - (void)didTapActivityButton:(id)sender;
@@ -54,17 +55,31 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.opaque = YES;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.accessoryType = UITableViewCellAccessoryNone;
-        self.hasActivityImage = NO; // No until one is set
+        self.hasAmount = YES; // No until one is set
         
-        self.activityImageView = [[ZPProfileImageView alloc] init];
-        [self.activityImageView setBackgroundColor:[UIColor clearColor]];
-        [self.activityImageView setOpaque:YES];
-        [self.mainView addSubview:self.activityImageView];
+        self.amountLabel = [[UILabel alloc] init];
+        [self.amountLabel setFont:[UIFont systemFontOfSize:10.0f]];
+        if ([reuseIdentifier isEqualToString:@"ActivityCell"]) {
+            [self.amountLabel setTextColor:[UIColor grayColor]];
+        } else {
+            [self.amountLabel setTextColor:[UIColor colorWithRed:34.0f/255.0f green:34.0f/255.0f blue:34.0f/255.0f alpha:1.0f]];
+        }
+        [self.amountLabel setNumberOfLines:1];
+        [self.amountLabel setBackgroundColor:[UIColor clearColor]];
+        self.amountLabel.textAlignment = NSTextAlignmentRight;
+        [self.mainView addSubview:self.amountLabel];
         
-        self.activityImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.activityImageButton setBackgroundColor:[UIColor clearColor]];
-        [self.activityImageButton addTarget:self action:@selector(didTapActivityButton:) forControlEvents:UIControlEventTouchUpInside];
-        [self.mainView addSubview:self.activityImageButton];
+        self.noteLabel = [[UILabel alloc] init];
+        [self.noteLabel setFont:[UIFont systemFontOfSize:10.0f]];
+        if ([reuseIdentifier isEqualToString:@"ActivityCell"]) {
+            [self.noteLabel setTextColor:[UIColor grayColor]];
+        } else {
+            [self.noteLabel setTextColor:[UIColor colorWithRed:34.0f/255.0f green:34.0f/255.0f blue:34.0f/255.0f alpha:1.0f]];
+        }
+        [self.noteLabel setNumberOfLines:0];
+        [self.noteLabel setBackgroundColor:[UIColor clearColor]];
+        [self.mainView addSubview:self.noteLabel];
+        
     }
     return self;
 }
@@ -77,16 +92,19 @@ static TTTTimeIntervalFormatter *timeFormatter;
     // Layout the activity image and show it if it is not nil (no image for the follow activity).
     // Note that the image view is still allocated and ready to be dispalyed since these cells
     // will be reused for all types of activity.
-    [self.activityImageView setFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 46.0f, 13.0f, 33.0f, 33.0f)];
-    [self.activityImageButton setFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 46.0f, 13.0f, 33.0f, 33.0f)];
+    CGSize amountSize = [self.amountLabel.text boundingRectWithSize:CGSizeMake(nameMaxWidth, CGFLOAT_MAX)
+                                                              options:NSStringDrawingUsesLineFragmentOrigin // wordwrap?
+                                                           attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}
+                                                              context:nil].size;
+    
+    
+    [self.amountLabel setFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - amountSize.width - 5.0f, nameY, amountSize.width, amountSize.height)];
     
     // Add activity image if one was set
-    if (self.hasActivityImage) {
-        [self.activityImageView setHidden:NO];
-        [self.activityImageButton setHidden:NO];
+    if (self.hasAmount) {
+        [self.amountLabel setHidden:NO];
     } else {
-        [self.activityImageView setHidden:YES];
-        [self.activityImageButton setHidden:YES];
+        [self.amountLabel setHidden:YES];
     }
     
     // Change frame of the content text so it doesn't go through the right-hand side picture
@@ -94,14 +112,26 @@ static TTTTimeIntervalFormatter *timeFormatter;
                                                               options:NSStringDrawingUsesLineFragmentOrigin // wordwrap?
                                                            attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}
                                                               context:nil].size;
-    [self.contentLabel setFrame:CGRectMake( 46.0f, 16.0f, contentSize.width, contentSize.height)];
+    [self.contentLabel setFrame:CGRectMake(self.nameButton.frame.origin.x, nameY, contentSize.width, contentSize.height)];
+    
+    CGSize toNameSize = [self.toNameButton.titleLabel.text boundingRectWithSize:CGSizeMake(nameMaxWidth, CGFLOAT_MAX)
+                                                                        options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin
+                                                                     attributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:13.0f]} context:nil].size;
+    [self.toNameButton setFrame:CGRectMake(self.contentLabel.frame.origin.x - 5.0f, nameY, toNameSize.width, toNameSize.height)];
+    
+    CGSize noteSize = [self.noteLabel.text boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, CGFLOAT_MAX)
+                                                        options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin
+                                                     attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.0f]}
+                                                        context:nil].size;
+    
+    [self.noteLabel setFrame:CGRectMake(self.nameButton.frame.origin.x, self.contentLabel.frame.origin.y + self.contentLabel.frame.size.height + 5.0f, noteSize.width, noteSize.height)];
     
     // Layout the timestamp label given new vertical
     CGSize timeSize = [self.timeLabel.text boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 72.0f - 46.0f, CGFLOAT_MAX)
                                                         options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin
                                                      attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.0f]}
                                                         context:nil].size;
-    [self.timeLabel setFrame:CGRectMake( 46.0f, self.contentLabel.frame.origin.y + self.contentLabel.frame.size.height + 7.0f, timeSize.width, timeSize.height)];
+    [self.timeLabel setFrame:CGRectMake( self.nameButton.frame.origin.x, self.mainView.bounds.size.height - timeSize.height - 5.0f, timeSize.width, timeSize.height)];
 }
 
 - (void)setIsNew:(BOOL)isNew {
@@ -120,6 +150,16 @@ static TTTTimeIntervalFormatter *timeFormatter;
     } else {
         // Need to do something here for activity with an image file
         // Not supported yet
+    }
+    
+    float amountString = [[activity objectForKey:kZPTransactionAmountKey] floatValue];
+    
+    if ([[[activity objectForKey:kZPTransactionFromUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+        [self.amountLabel setTextColor:[UIColor zp_redColor]];
+        [self.amountLabel setText:[NSString stringWithFormat:@"- RS%.02f", amountString]];
+    } else {
+        [self.amountLabel setTextColor:[UIColor zp_greenColor]];
+        [self.amountLabel setText:[NSString stringWithFormat:@"+ RS%.02f", amountString]];
     }
     
     NSString *activityString = [ZPActivityFeedViewController stringForActivityType:(NSString *)[activity objectForKey:kZPTransactionTypeKey]];
@@ -156,6 +196,18 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self.contentLabel setText:activityString];
     }
     
+    
+    CGSize contentLabelSize = [self.contentLabel.text boundingRectWithSize:CGSizeMake(nameMaxWidth, CGFLOAT_MAX)
+                                                    options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin
+                                                    attributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:13.0f]}
+                                                    context:nil].size;
+    NSString *toUserString = [[activity objectForKey:kZPTransactionToUserKey] objectForKey:kZPUserDisplayNameKey];
+    NSString *paddedString2 = [ZPBaseTableViewCell padString:toUserString withFont:[UIFont boldSystemFontOfSize:13.0f] toWidth:contentLabelSize.width];
+    
+    [self.toNameButton setTitle:paddedString2 forState:UIControlStateNormal];
+    
+    [self.noteLabel setText:[activity objectForKey:kZPTransactionNoteKey]];
+    
     [self.timeLabel setText:[timeFormatter stringForTimeIntervalFromDate:[NSDate date] toDate:[activity createdAt]]];
     
     [self setNeedsDisplay];
@@ -188,6 +240,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
     return [self heightForCellWithName:name contentString:content cellInsetWidth:0.0f];
 }
 
++ (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content noteString:(NSString *)note {
+    return [self heightForCellWithName:name contentString:content noteString:note cellInsetWidth:0.0f];
+}
+
 + (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content cellInsetWidth:(CGFloat)cellInset {
     CGSize nameSize = [name boundingRectWithSize:CGSizeMake(200.0f, CGFLOAT_MAX)
                                          options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin
@@ -201,6 +257,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
                                                  attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}
                                                     context:nil].size;
     
+    
     CGFloat singleLineHeight = [@"Test" boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)
                                                      options:NSStringDrawingUsesLineFragmentOrigin
                                                   attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}
@@ -212,13 +269,38 @@ static TTTTimeIntervalFormatter *timeFormatter;
     return 58.0f + fmax(0.0f, multilineHeightAddition);
 }
 
++ (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content noteString:(NSString *)note cellInsetWidth:(CGFloat)cellInset {
+    CGSize nameSize = [name boundingRectWithSize:CGSizeMake(200.0f, CGFLOAT_MAX)
+                                         options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin
+                                      attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13.0f]}
+                                         context:nil].size;
+    NSString *paddedString = [ZPBaseTableViewCell padString:content withFont:[UIFont systemFontOfSize:13.0] toWidth:nameSize.width];
+    CGFloat horizontalTextSpace = [ZPActivityTableViewCell horizontalTextSpaceForInsetWidth:cellInset];
+    
+    CGSize contentSize = [paddedString boundingRectWithSize:CGSizeMake(horizontalTextSpace, CGFLOAT_MAX)
+                                                    options:NSStringDrawingUsesLineFragmentOrigin
+                                                 attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}
+                                                    context:nil].size;
+    
+    CGSize noteSize = [note boundingRectWithSize:CGSizeMake(horizontalTextSpace, CGFLOAT_MAX)
+                                        options:NSStringDrawingUsesLineFragmentOrigin
+                                      attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}
+                                        context:nil].size;
+    
+    
+    CGFloat singleLineHeight = [@"Test" boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)
+                                                     options:NSStringDrawingUsesLineFragmentOrigin
+                                                  attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}
+                                                     context:nil].size.height;
+    
+    // Calculate the added height neccessary for multiline text. Ensure value is not below 0
+    CGFloat multilineHeightAddition = (contentSize.height + noteSize.height) - singleLineHeight;
+    
+    return 58.0f + fmax(0.0f, multilineHeightAddition);
+}
+
 - (void)setActivityImageFile:(PFFile *)imageFile {
-    if (imageFile) {
-        [self.activityImageView setFile:imageFile];
-        [self setHasActivityImage:YES];
-    } else {
-        [self setHasActivityImage:NO];
-    }
+
 }
 
 - (void)didTapActivityButton:(id)sender {
