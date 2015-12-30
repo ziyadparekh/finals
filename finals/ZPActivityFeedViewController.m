@@ -16,17 +16,20 @@
 
 @interface ZPActivityFeedViewController ()
 
+@property (nonatomic, strong) NSDate *lastRefresh;
+
 @end
 
 @implementation ZPActivityFeedViewController
+@synthesize lastRefresh;
 
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
         self.parseClassName = kZPTransactionKey;
         self.paginationEnabled = YES;
-        self.pullToRefreshEnabled = YES;
         self.objectsPerPage = 15;
+        // The Loading text clashes
         self.loadingViewEnabled = NO;
     }
     return self;
@@ -39,18 +42,13 @@
     
     [super viewDidLoad];
     
-    UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-    [texturedBackgroundView setBackgroundColor:[UIColor zp_composeGreyBackgroundColor]];
-    self.tableView.backgroundView = texturedBackgroundView;
+    self.tableView.backgroundColor = [UIColor zp_composeGreyBackgroundColor];
+    
+    lastRefresh = [[NSUserDefaults standardUserDefaults] objectForKey:kZPUserDefaultsActivityFeedViewControllerLastRefreshKey];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    self.tableView.separatorColor = [UIColor zp_dividerGreyColor];
 }
 
 #pragma mark - UITableViewDelegate
@@ -89,30 +87,35 @@
     PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
     [query whereKey:kZPTransactionToUserKey notEqualTo:[PFUser currentUser]];
     [query whereKey:kZPTransactionFromUserKey equalTo:[PFUser currentUser]];
-    [query whereKeyExists:kZPTransactionFromUserKey];
-    [query includeKey:kZPTransactionFromUserKey];
-    [query includeKey:kZPTransactionToUserKey];
-    [query orderByDescending:kZPTransactionCreatedAtKey];
     
-    [query setCachePolicy:kPFCachePolicyNetworkOnly];
+    PFQuery *query2 = [PFQuery queryWithClassName:self.parseClassName];
+    [query2 whereKey:kZPTransactionToUserKey equalTo:[PFUser currentUser]];
+    [query2 whereKey:kZPTransactionFromUserKey notEqualTo:[PFUser currentUser]];
     
+    PFQuery *combinedQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:query, query2, nil]];
+    [combinedQuery includeKey:kZPTransactionFromUserKey];
+    [combinedQuery includeKey:kZPTransactionToUserKey];
+    [combinedQuery orderByDescending:kZPTransactionCreatedAtKey];
+    [combinedQuery setCachePolicy:kPFCachePolicyNetworkOnly];
+                              
+
     // If no objects are loaded in memory, we look to the cache first to fill the table
     // and then subsequently do a query against the network.
     //
     // If there is no network connection, we will hit the cache first.
     if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:@selector(isParseReachable)]) {
-        [query setCachePolicy:kPFCachePolicyCacheThenNetwork];
+        [combinedQuery setCachePolicy:kPFCachePolicyCacheThenNetwork];
     }
     
-    return query;
+    return combinedQuery;
 }
 
 - (void)objectsDidLoad:(nullable NSError *)error {
     [super objectsDidLoad:error];
     
-//    lastRefresh = [NSDate date];
-//    [[NSUserDefaults standardUserDefaults] setObject:lastRefresh forKey:kPAPUserDefaultsActivityFeedViewControllerLastRefreshKey];
-//    [[NSUserDefaults standardUserDefaults] synchronize];
+    lastRefresh = [NSDate date];
+    [[NSUserDefaults standardUserDefaults] setObject:lastRefresh forKey:kZPUserDefaultsActivityFeedViewControllerLastRefreshKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     
     [MBProgressHUD hideHUDForView:self.view animated:YES];
     
@@ -132,18 +135,18 @@
         self.tableView.tableHeaderView = nil;
         self.tableView.scrollEnabled = YES;
         
-//        NSUInteger unreadCount = 0;
-//        for (PFObject *activity in self.objects) {
-//            if ([lastRefresh compare:[activity createdAt]] == NSOrderedAscending && ![[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeJoined]) {
-//                unreadCount++;
-//            }
-//        }
-//        
-//        if (unreadCount > 0) {
-//            self.navigationController.tabBarItem.badgeValue = [NSString stringWithFormat:@"%lu",(unsigned long)unreadCount];
-//        } else {
-//            self.navigationController.tabBarItem.badgeValue = nil;
-//        }
+        NSUInteger unreadCount = 0;
+        for (PFObject *activity in self.objects) {
+            if ([lastRefresh compare:[activity createdAt]] == NSOrderedAscending) {
+                unreadCount++;
+            }
+        }
+        
+        if (unreadCount > 0) {
+            self.navigationController.tabBarItem.badgeValue = [NSString stringWithFormat:@"%lu",(unsigned long)unreadCount];
+        } else {
+            self.navigationController.tabBarItem.badgeValue = nil;
+        }
     }
 }
 
@@ -156,7 +159,6 @@
         [cell setDelegate:self];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     }
-    NSLog(@"%@", object);
     [cell setActivity:object];
     
 //    if ([lastRefresh compare:[object createdAt]] == NSOrderedAscending) {

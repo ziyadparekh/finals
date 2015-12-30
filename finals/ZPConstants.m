@@ -10,6 +10,9 @@
 
 @implementation ZPConstants
 
+#pragma mark - NSUserDefaults
+NSString *const kZPUserDefaultsActivityFeedViewControllerLastRefreshKey = @"com.parse.Finals.userDefaults.activityFeedViewController.lastRefresh";
+
 #pragma mark - User Class
 
 NSString *const kZPUserClass                                   = @"_User";

@@ -2,59 +2,23 @@
 //  ZPHomeViewController.m
 //  finals
 //
-//  Created by Ziyad Parekh on 12/25/15.
+//  Created by Ziyad Parekh on 12/29/15.
 //  Copyright (c) 2015 Ziyad Parekh. All rights reserved.
 //
 
 #import "ZPHomeViewController.h"
 #import "ZPConstants.h"
+#import "AppDelegate.h"
 
 @interface ZPHomeViewController ()
-@property (nonatomic, assign) BOOL shouldReloadOnAppear;
-@property (nonatomic, strong) NSMutableSet *reusableSectionHeaderViews;
-@property (nonatomic, strong) NSMutableDictionary *outstandingSectionHeaderQueries;
+
 @end
 
 @implementation ZPHomeViewController
 
-@synthesize reusableSectionHeaderViews;
-@synthesize shouldReloadOnAppear;
-@synthesize outstandingSectionHeaderQueries;
-
-- (id)initWithStyle:(UITableViewStyle)style {
-    self = [super initWithStyle:style];
-    if (self) {
-        
-        self.outstandingSectionHeaderQueries = [NSMutableDictionary dictionary];
-        
-        // The className to query on
-        self.parseClassName = kZPPhotoClassKey;
-        
-        // Whether the built-in pull-to-refresh is enabled
-        self.pullToRefreshEnabled = YES;
-        
-        // Whether the built-in pagination is enabled
-        self.paginationEnabled = NO;
-        
-        // The number of objects to show per page
-        // self.objectsPerPage = 10;
-        
-        // Improve scrolling performance by reusing UITableView section headers
-        self.reusableSectionHeaderViews = [NSMutableSet setWithCapacity:3];
-        
-        // The Loading text clashes with the dark Anypic design
-        self.loadingViewEnabled = NO;
-        
-        self.shouldReloadOnAppear = NO;
-    }
-    return self;
-}
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -62,57 +26,32 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - UITableViewDataSource
+#pragma mark - PFQueryTableViewController
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.objects.count * 2 + (self.paginationEnabled ? 1 : 0);
-}
-
-
-#pragma mark - UITableViewDelegate
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return nil;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 0.0f;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    return nil;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 0.0f;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.paginationEnabled && (self.objects.count * 2) == indexPath.row) {
-        // Load More Section
-        return 44.0f;
-    } else if (indexPath.row % 2 == 0) {
-        return 44.0f;
+- (PFQuery * __nonnull)queryForTable {
+    if (![PFUser currentUser]) {
+        PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
+        [query setLimit:0];
+        return query;
     }
     
-    return 320.0f;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [super tableView:tableView didSelectRowAtIndexPath:indexPath];
+    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
+    [query includeKey:kZPTransactionFromUserKey];
+    [query includeKey:kZPTransactionToUserKey];
+    [query orderByDescending:kZPTransactionCreatedAtKey];
+    [query setCachePolicy:kPFCachePolicyNetworkOnly];
     
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (![self objectAtIndexPath:indexPath]) {
-        // Load More Cell
-        [self loadNextPage];
+    // If no objects are loaded in memory, we look to the cache first to fill the table
+    // and then subsequently do a query against the network.
+    //
+    // If there is no network connection, we will hit the cache first.
+    if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:@selector(isParseReachable)]) {
+        [query setCachePolicy:kPFCachePolicyCacheThenNetwork];
     }
+    
+    return query;
 }
-
 
 /*
 #pragma mark - Navigation

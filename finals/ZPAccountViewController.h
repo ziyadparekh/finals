@@ -8,10 +8,11 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
+#import <ParseUI/ParseUI.h>
 
 #import "ZPHomeViewController.h"
 
-@interface ZPAccountViewController : ZPHomeViewController
+@interface ZPAccountViewController : PFQueryTableViewController
 
 @property (strong, nonatomic) PFUser *user;
 @property (nonatomic, assign) BOOL showBackButton;

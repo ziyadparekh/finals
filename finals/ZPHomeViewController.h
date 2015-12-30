@@ -2,12 +2,12 @@
 //  ZPHomeViewController.h
 //  finals
 //
-//  Created by Ziyad Parekh on 12/25/15.
+//  Created by Ziyad Parekh on 12/29/15.
 //  Copyright (c) 2015 Ziyad Parekh. All rights reserved.
 //
 
-#import <ParseUI/ParseUI.h>
+#import "ZPActivityFeedViewController.h"
 
-@interface ZPHomeViewController : PFQueryTableViewController
+@interface ZPHomeViewController : ZPActivityFeedViewController
 
 @end

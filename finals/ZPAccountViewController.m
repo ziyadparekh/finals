@@ -23,12 +23,20 @@
 
 #pragma mark - Initialization
 
+- (id)initWithStyle:(UITableViewStyle)style {
+    self = [super initWithStyle:style];
+    if (self) {
+        self.parseClassName = kZPTransactionKey;
+    }
+    return self;
+}
+
 - (id)initWithUser:(PFUser *)aUser andBackButton:(BOOL)backButton {
     self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
         self.user = aUser;
         self.showBackButton = backButton;
-        
+        self.parseClassName = kZPTransactionKey;
         if (!aUser) {
             [NSException raise:NSInvalidArgumentException format:@"PAPAccountViewController init exception: user cannot be nil"];
         }

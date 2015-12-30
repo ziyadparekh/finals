@@ -111,6 +111,7 @@
     
     NSArray *displayNameComponents = [displayName componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *firstName = [displayNameComponents objectAtIndex:0];
+    
     if (firstName.length > 100) {
         // truncate to 100 so that it fits in a Push payload
         firstName = [firstName substringToIndex:100];

@@ -17,6 +17,9 @@ typedef enum {
 
 @interface ZPConstants : NSObject
 
+#pragma mark - NSUserDefaults
+extern NSString *const kZPUserDefaultsActivityFeedViewControllerLastRefreshKey;
+
 #pragma mark - PFObject User Class
 
 extern NSString *const kZPUserClass;

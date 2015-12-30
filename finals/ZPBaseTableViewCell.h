@@ -68,9 +68,9 @@
 
 #define vertTextBorderSpacing 5.0f
 
-#define avatarX 0.0f
-#define avatarY 0.0f
-#define avatarDim 42.0f
+#define avatarX horiBorderSpacing
+#define avatarY horiBorderSpacing
+#define avatarDim 33.0f
 
 #define nameX avatarX+avatarDim+horiElemSpacing
 #define nameY vertTextBorderSpacing
