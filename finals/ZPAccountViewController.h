@@ -11,10 +11,11 @@
 #import <ParseUI/ParseUI.h>
 
 #import "ZPHomeViewController.h"
+#import "ZPActivityTableViewCell.h"
 
-@interface ZPAccountViewController : PFQueryTableViewController
+@interface ZPAccountViewController : PFQueryTableViewController <ZPActivityTableViewCellDelegate>
 
-@property (strong, nonatomic) PFUser *user;
+@property (strong, nonatomic) PFUser *userInView;
 @property (nonatomic, assign) BOOL showBackButton;
 
 - (id)initWithUser:(PFUser *)aUser andBackButton:(BOOL)backButton;

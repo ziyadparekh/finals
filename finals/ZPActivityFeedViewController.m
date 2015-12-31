@@ -11,11 +11,13 @@
 #import "ZPActivityFeedViewController.h"
 #import "ZPConstants.h"
 #import "ZPBaseTableViewCell.h"
+#import "ZPAccountViewController.h"
 #import "UIColor+ZPColors.h"
 #import "AppDelegate.h"
 
 @interface ZPActivityFeedViewController ()
 
+@property (nonatomic, strong) UINavigationController *presentingAccountNavController;
 @property (nonatomic, strong) NSDate *lastRefresh;
 
 @end
@@ -34,6 +36,17 @@
     }
     return self;
 }
+
+#pragma mark - UIViewController
+
+//- (UINavigationController *)presentingAccountNavController {
+//    if (!_presentingAccountNavController) {
+//        
+//        ZPAccountViewController *accountViewController = [[ZPAccountViewController alloc] initWithUser:[PFUser currentUser] andBackButton:YES];
+//        _presentingAccountNavController = [[UINavigationController alloc] initWithRootViewController:accountViewController];
+//    }
+//    return _presentingAccountNavController;
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -117,8 +130,6 @@
     [[NSUserDefaults standardUserDefaults] setObject:lastRefresh forKey:kZPUserDefaultsActivityFeedViewControllerLastRefreshKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    [MBProgressHUD hideHUDForView:self.view animated:YES];
-    
     if (self.objects.count == 0 && ![[self queryForTable] hasCachedResult]) {
         self.tableView.scrollEnabled = NO;
         self.navigationController.tabBarItem.badgeValue = nil;
@@ -140,12 +151,6 @@
             if ([lastRefresh compare:[activity createdAt]] == NSOrderedAscending) {
                 unreadCount++;
             }
-        }
-        
-        if (unreadCount > 0) {
-            self.navigationController.tabBarItem.badgeValue = [NSString stringWithFormat:@"%lu",(unsigned long)unreadCount];
-        } else {
-            self.navigationController.tabBarItem.badgeValue = nil;
         }
     }
 }
@@ -172,13 +177,30 @@
     return cell;
 }
 
+#pragma mark - ZPActivityCellDelegate Methods
+
+- (void)cell:(ZPBaseTableViewCell *)cellView didTapUserButton:(PFUser *)user {
+    // Push account view controller
+    ZPAccountViewController *accountViewController = [[ZPAccountViewController alloc] initWithUser:user andBackButton:YES];
+    NSLog(@"Presenting account view controller with user: %@", user);
+    [self.navigationController pushViewController:accountViewController animated:YES];
+}
+
+- (void)cell:(ZPActivityTableViewCell *)cellView didTapToUserButton:(PFUser *)user {
+    // Push account view controller
+    ZPAccountViewController *accountViewController = [[ZPAccountViewController alloc] initWithUser:user andBackButton:YES];
+    NSLog(@"Presenting account view controller with user: %@", user);
+    [self.navigationController pushViewController:accountViewController animated:YES];
+}
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - PAPActivityFeedViewController
+#pragma mark - ZPActivityFeedViewController
 
 + (NSString *)stringForActivityType:(NSString *)activityType {
     if ([activityType isEqualToString:kZPTransactionCashOutKey]) {

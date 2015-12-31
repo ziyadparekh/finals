@@ -19,6 +19,10 @@
 /*!Set the new state. This changes the background of the cell. */
 - (void)setIsNew:(BOOL)isNew;
 
+/*! Static Helper methods */
++ (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content noteString:(NSString *)note cellInsetWidth:(CGFloat)cellInset;
++ (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content noteString:(NSString *)note;
+
 @end
 
 /*!
@@ -32,5 +36,6 @@
  @param activity the PFObject of the activity that was tapped
  */
 - (void)cell:(ZPActivityTableViewCell *)cellView didTapActivityButton:(PFObject *)activity;
+- (void)cell:(ZPActivityTableViewCell *)cellView didTapToUserButton:(PFUser *)user;
 
 @end

@@ -62,6 +62,7 @@
     [PFACL setDefaultACL:defaultAcl withAccessForCurrentUser:YES];
     
     [self setupAppearance];
+    [application setStatusBarStyle:UIStatusBarStyleLightContent];
     
     // TODO::
     // Use Reachability to monitor connectivity
@@ -112,7 +113,7 @@
 
 // Set appearance parameters to achieve custom look and feel
 - (void)setupAppearance {
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    //[UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
     [[UINavigationBar appearance] setTintColor:[UIColor zp_lightBlueColor]];
     [[UINavigationBar appearance] setBarTintColor:[UIColor zp_venmoBlueColor]];

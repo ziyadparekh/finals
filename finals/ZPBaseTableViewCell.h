@@ -22,7 +22,7 @@
 /*!
  Unfortunately, objective-c does not allow you to redefine the type of a property,
  so we cannot set the type of the delegate here. Doing so would mean that the subclass
- of would not be able to define new delegate methods (which we do in PAPActivityCell).
+ of would not be able to define new delegate methods (which we do in ZPActivityTableViewCEll).
  */
 @property (nonatomic, strong) id delegate;
 
@@ -32,7 +32,6 @@
 /*! The cell's views. These shouldn't be modified but need to be exposed for the subclass */
 @property (nonatomic, strong) UIView *mainView;
 @property (nonatomic, strong) UIButton *nameButton;
-@property (nonatomic, strong) UIButton *toNameButton;
 @property (nonatomic, strong) UIButton *avatarImageButton;
 @property (nonatomic, strong) ZPProfileImageView *avatarImageView;
 @property (nonatomic, strong) UILabel *contentLabel;
@@ -52,8 +51,6 @@
 /*! Static Helper methods */
 + (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content;
 + (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content cellInsetWidth:(CGFloat)cellInset;
-+ (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content noteString:(NSString *)note cellInsetWidth:(CGFloat)cellInset;
-+ (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content noteString:(NSString *)note;
 + (NSString *)padString:(NSString *)string withFont:(UIFont *)font toWidth:(CGFloat)width;
 
 @end

@@ -21,15 +21,15 @@ static TTTTimeIntervalFormatter *timeFormatter;
 /*! Private view components */
 @property (nonatomic, strong) UILabel *amountLabel;
 @property (nonatomic, strong) UILabel *noteLabel;
+@property (nonatomic, strong) UIButton *toNameButton;
 
 /*! Flag to remove the right-hand side image if not necessary */
-@property (nonatomic) BOOL hasAmount;
-
-/*! Private setter for the right-hand side image */
-- (void)setTransactionAmount:(NSString *)amount;
+- (BOOL)hasAmount;
 
 /*! Button touch handler for activity image button overlay */
 - (void)didTapActivityButton:(id)sender;
+/*! Button touch handler for recipient user */
+- (void)didTapToUserButtonAction:(id)sender;
 
 /*! Static helper method to calculate the space available for text given images and insets */
 + (CGFloat)horizontalTextSpaceForInsetWidth:(CGFloat)insetWidth;
@@ -38,6 +38,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 
 @implementation ZPActivityTableViewCell
+@synthesize amountLabel;
+@synthesize noteLabel;
+@synthesize toNameButton;
 
 #pragma mark - NSObject
 
@@ -55,7 +58,15 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.opaque = YES;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.accessoryType = UITableViewCellAccessoryNone;
-        self.hasAmount = YES; // No until one is set
+        
+        self.toNameButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.toNameButton setBackgroundColor:[UIColor clearColor]];
+        [self.toNameButton setTitleColor:[UIColor zp_darkGreyColor] forState:UIControlStateNormal];
+        [self.toNameButton setTitleColor:[UIColor zp_darkGreyColor] forState:UIControlStateHighlighted];
+        [self.toNameButton.titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
+        [self.toNameButton.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+        [self.toNameButton addTarget:self action:@selector(didTapToUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self.mainView addSubview:self.toNameButton];
         
         self.amountLabel = [[UILabel alloc] init];
         [self.amountLabel setFont:[UIFont boldSystemFontOfSize:10.0f]];
@@ -71,6 +82,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self.noteLabel setBackgroundColor:[UIColor clearColor]];
         [self.mainView addSubview:self.noteLabel];
         
+        [self.mainView bringSubviewToFront:self.nameButton];
+        [self.mainView bringSubviewToFront:self.contentLabel];
+        
     }
     return self;
 }
@@ -85,7 +99,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
     }
 }
 
-
 #pragma mark - UIView
 
 - (void)layoutSubviews {
@@ -98,12 +111,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
                                                               options:NSStringDrawingUsesLineFragmentOrigin // wordwrap?
                                                            attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:10.0f]}
                                                               context:nil].size;
-    
-    
     [self.amountLabel setFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - amountSize.width - 10.0f, nameY + 10.0f, amountSize.width, amountSize.height)];
     
-    // Add activity image if one was set
-    if (self.hasAmount) {
+    // Add amount label if user is part of transaction
+    if ([self hasAmount]) {
         [self.amountLabel setHidden:NO];
     } else {
         [self.amountLabel setHidden:YES];
@@ -125,7 +136,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
                                                         options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin
                                                      attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.0f]}
                                                         context:nil].size;
-    
     [self.noteLabel setFrame:CGRectMake(self.nameButton.frame.origin.x, self.contentLabel.frame.origin.y + self.contentLabel.frame.size.height + 3.0f, noteSize.width, noteSize.height)];
     
     // Layout the timestamp label given new vertical
@@ -147,15 +157,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
 - (void)setActivity:(PFObject *)activity {
     // Set the activity property
     _activity = activity;
-    if ([[activity objectForKey:kZPTransactionTypeKey] isEqualToString:kZPTransactionPaymentKey] || [[activity objectForKey:kZPTransactionTypeKey] isEqualToString:kZPTransactionCashOutKey]) {
-        [self setActivityImageFile:nil];
-    } else {
-        // Need to do something here for activity with an image file
-        // Not supported yet
-    }
     
     float amountString = [[activity objectForKey:kZPTransactionAmountKey] floatValue];
-    
     if ([[[activity objectForKey:kZPTransactionFromUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
         [self.amountLabel setTextColor:[UIColor zp_redColor]];
         [self.amountLabel setText:[NSString stringWithFormat:@"- Rs%.02f", amountString]];
@@ -178,7 +181,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
     if (self.user && [self.user objectForKey:kZPUserDisplayNameKey] && [[self.user objectForKey:kZPUserDisplayNameKey] length] > 0) {
         nameString = [ZPUtility firstNameForDisplayName:[self.user objectForKey:kZPUserDisplayNameKey]];
     }
-    
     [self.nameButton setTitle:nameString forState:UIControlStateNormal];
     [self.nameButton setTitle:nameString forState:UIControlStateHighlighted];
     
@@ -198,18 +200,15 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self.contentLabel setText:activityString];
     }
     
-    
     CGSize contentLabelSize = [self.contentLabel.text boundingRectWithSize:CGSizeMake(nameMaxWidth, CGFLOAT_MAX)
                                                     options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin
                                                     attributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:13.0f]}
                                                     context:nil].size;
     NSString *toUserString = [ZPUtility firstNameForDisplayName:[[activity objectForKey:kZPTransactionToUserKey] objectForKey:kZPUserDisplayNameKey]];
-    NSString *paddedString2 = [ZPBaseTableViewCell padString:toUserString withFont:[UIFont boldSystemFontOfSize:13.0f] toWidth:contentLabelSize.width];
-    
-    [self.toNameButton setTitle:paddedString2 forState:UIControlStateNormal];
-    
+    NSString *toUserPaddedString = [ZPBaseTableViewCell padString:toUserString withFont:[UIFont boldSystemFontOfSize:13.0f] toWidth:contentLabelSize.width];
+
+    [self.toNameButton setTitle:toUserPaddedString forState:UIControlStateNormal];
     [self.noteLabel setText:[activity objectForKey:kZPTransactionNoteKey]];
-    
     [self.timeLabel setText:[timeFormatter stringForTimeIntervalFromDate:[NSDate date] toDate:[activity createdAt]]];
     
     [self setNeedsDisplay];
@@ -247,7 +246,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 + (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content cellInsetWidth:(CGFloat)cellInset {
-    CGSize nameSize = [name boundingRectWithSize:CGSizeMake(200.0f, CGFLOAT_MAX)
+    CGSize nameSize = [name boundingRectWithSize:CGSizeMake(nameMaxWidth, CGFLOAT_MAX)
                                          options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin
                                       attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13.0f]}
                                          context:nil].size;
@@ -272,7 +271,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 + (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content noteString:(NSString *)note cellInsetWidth:(CGFloat)cellInset {
-    CGSize nameSize = [name boundingRectWithSize:CGSizeMake(200.0f, CGFLOAT_MAX)
+    CGSize nameSize = [name boundingRectWithSize:CGSizeMake(nameMaxWidth, CGFLOAT_MAX)
                                          options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin
                                       attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13.0f]}
                                          context:nil].size;
@@ -301,26 +300,16 @@ static TTTTimeIntervalFormatter *timeFormatter;
     return 58.0f + fmax(0.0f, multilineHeightAddition);
 }
 
-- (void)setActivityImageFile:(PFFile *)imageFile {
-
-}
-
 - (void)didTapActivityButton:(id)sender {
     if (self.delegate && [self.delegate respondsToSelector:@selector(cell:didTapActivityButton:)]) {
         [self.delegate cell:self didTapActivityButton:self.activity];
     }
 }
 
-
-/* Extra boilerplate code  */
-- (void)awakeFromNib {
-    // Initialization code
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
+- (void)didTapToUserButtonAction:(id)sender {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(cell:didTapToUserButton:)]) {
+        [self.delegate cell:self didTapToUserButton:[self.activity objectForKey:kZPTransactionToUserKey]];
+    }
 }
 
 @end

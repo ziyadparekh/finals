@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Ziyad Parekh. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
 #import "ZPBaseTableViewCell.h"
 #import <FormatterKit/TTTTimeIntervalFormatter.h>
 #import "ZPProfileImageView.h"
@@ -31,7 +32,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @synthesize avatarImageView;
 @synthesize avatarImageButton;
 @synthesize nameButton;
-@synthesize toNameButton;
 @synthesize contentLabel;
 @synthesize timeLabel;
 @synthesize separatorImage;
@@ -72,46 +72,30 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         self.nameButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.nameButton setBackgroundColor:[UIColor clearColor]];
-        
         [self.nameButton setTitleColor:[UIColor zp_darkGreyColor] forState:UIControlStateNormal];
         [self.nameButton setTitleColor:[UIColor zp_darkGreyColor] forState:UIControlStateHighlighted];
         [self.nameButton.titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
         [self.nameButton.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-        [self.nameButton addTarget:self action:@selector(didTapUserButtonAction) forControlEvents:UIControlEventTouchUpInside];
+        [self.nameButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [mainView addSubview:self.nameButton];
         
         self.contentLabel = [[UILabel alloc] init];
         [self.contentLabel setFont:[UIFont systemFontOfSize:13.0f]];
-        if ([reuseIdentifier isEqualToString:@"ActivityCell"]) {
-            [self.contentLabel setTextColor:[UIColor grayColor]];
-        } else {
-            [self.contentLabel setTextColor:[UIColor colorWithRed:34.0f/255.0f green:34.0f/255.0f blue:34.0f/255.0f alpha:1.0f]];
-        }
+        [self.contentLabel setTextColor:[UIColor zp_darkGreyColor]];
         [self.contentLabel setNumberOfLines:0];
         [self.contentLabel setLineBreakMode:NSLineBreakByWordWrapping];
         [self.contentLabel setBackgroundColor:[UIColor clearColor]];
         [mainView addSubview:self.contentLabel];
         
-        self.toNameButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.toNameButton setBackgroundColor:[UIColor clearColor]];
-        
-        
-        [self.toNameButton setTitleColor:[UIColor zp_darkGreyColor] forState:UIControlStateNormal];
-        [self.toNameButton setTitleColor:[UIColor zp_darkGreyColor] forState:UIControlStateHighlighted];
-        [self.toNameButton.titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
-        [self.toNameButton.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-        [self.toNameButton addTarget:self action:@selector(didTapUserButtonAction) forControlEvents:UIControlEventTouchUpInside];
-        [mainView addSubview:self.toNameButton];
-        
         self.timeLabel = [[UILabel alloc] init];
         [self.timeLabel setFont:[UIFont systemFontOfSize:10]];
-        [self.timeLabel setTextColor:[UIColor lightGrayColor]];
+        [self.timeLabel setTextColor:[UIColor zp_horseGrey]];
         [self.timeLabel setBackgroundColor:[UIColor clearColor]];
         [mainView addSubview:self.timeLabel];
         
         self.avatarImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.avatarImageButton setBackgroundColor:[UIColor clearColor]];
-        [self.avatarImageButton addTarget:self action:@selector(didTapUserButtonAction) forControlEvents:UIControlEventTouchUpInside];
+        [self.avatarImageButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [mainView addSubview:self.avatarImageButton];
         
         self.separatorImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SeparatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 1, 0, 1)]];
@@ -144,11 +128,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
                                                               options:NSStringDrawingUsesLineFragmentOrigin
                                                            attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:13.0f]} context:nil].size;
     [self.contentLabel setFrame:CGRectMake(nameX, nameY + 6.0f, contentSize.width, contentSize.height)];
-    
-    CGSize toNameSize = [self.toNameButton.titleLabel.text boundingRectWithSize:CGSizeMake(nameMaxWidth, CGFLOAT_MAX)
-                                                                    options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin
-                                                                 attributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:13.0f]} context:nil].size;
-    [self.toNameButton setFrame:CGRectMake(self.contentLabel.frame.origin.x, nameY + 6.0f, toNameSize.width, toNameSize.height)];
     
     // Layout the timestamp label
     CGSize timeSize = [self.timeLabel.text boundingRectWithSize:CGSizeMake(horizontalTextSpace, CGFLOAT_MAX)
