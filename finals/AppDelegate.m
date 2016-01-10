@@ -15,8 +15,10 @@
 #import <Parse/Parse.h>
 #import <ParseFacebookUtilsV4.h>
 #import <FontAwesomeKit/FAKFontAwesome.h>
+#import <VENTouchLock/VENTouchLock.h>
 #import "ParseCrashReporting.h"
 #import "ZPWelcomeViewController.h"
+#import "ZPLockSplashViewController.h"
 #import "ZPHomeViewController.h"
 #import "ZPActivityFeedViewController.h"
 #import "ZPAccountViewController.h"
@@ -64,6 +66,13 @@
     [defaultAcl setPublicReadAccess:YES];
     [PFACL setDefaultACL:defaultAcl withAccessForCurrentUser:YES];
     
+    // Set up touch lock instance
+    [[VENTouchLock sharedInstance] setKeychainService:@"relayService"
+                                      keychainAccount:@"relayAccount"
+                                        touchIDReason:@"Scan your fingerprint to use the app"
+                                 passcodeAttemptLimit:5
+                            splashViewControllerClass:[ZPLockSplashViewController class]];
+    
     [self setupAppearance];
     [application setStatusBarStyle:UIStatusBarStyleLightContent];
     
@@ -78,8 +87,6 @@
     
     self.window.rootViewController = self.navController;
     [self.window makeKeyAndVisible];
-    
-    //[self logOut];
     
     return YES;
 }

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		8705EEAC1C38B2EF00A440A1 /* ZPSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8705EEAB1C38B2EF00A440A1 /* ZPSettingsTableViewController.m */; };
+		8705EEAF1C42E4BB00A440A1 /* ZPLockSplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8705EEAE1C42E4BB00A440A1 /* ZPLockSplashViewController.m */; };
+		8705EEB21C42F9F100A440A1 /* ZPPasscodeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8705EEB11C42F9F100A440A1 /* ZPPasscodeTableViewController.m */; };
 		8715DE551C3202F000B6D507 /* ZPBaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8715DE541C3202F000B6D507 /* ZPBaseTableViewCell.m */; };
 		8715DE581C32154700B6D507 /* ZPActivityTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8715DE571C32154700B6D507 /* ZPActivityTableViewCell.m */; };
 		8715DE5B1C32215100B6D507 /* ZPActivityFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8715DE5A1C32215100B6D507 /* ZPActivityFeedViewController.m */; };
@@ -79,6 +81,10 @@
 		778E6E8793F77075E3957A30 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		8705EEAA1C38B2EF00A440A1 /* ZPSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPSettingsTableViewController.h; sourceTree = "<group>"; };
 		8705EEAB1C38B2EF00A440A1 /* ZPSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPSettingsTableViewController.m; sourceTree = "<group>"; };
+		8705EEAD1C42E4BB00A440A1 /* ZPLockSplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPLockSplashViewController.h; sourceTree = "<group>"; };
+		8705EEAE1C42E4BB00A440A1 /* ZPLockSplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPLockSplashViewController.m; sourceTree = "<group>"; };
+		8705EEB01C42F9F100A440A1 /* ZPPasscodeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPPasscodeTableViewController.h; sourceTree = "<group>"; };
+		8705EEB11C42F9F100A440A1 /* ZPPasscodeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPPasscodeTableViewController.m; sourceTree = "<group>"; };
 		8715DE531C3202F000B6D507 /* ZPBaseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPBaseTableViewCell.h; sourceTree = "<group>"; };
 		8715DE541C3202F000B6D507 /* ZPBaseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPBaseTableViewCell.m; sourceTree = "<group>"; };
 		8715DE561C32154700B6D507 /* ZPActivityTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPActivityTableViewCell.h; sourceTree = "<group>"; };
@@ -338,6 +344,10 @@
 			children = (
 				8705EEAA1C38B2EF00A440A1 /* ZPSettingsTableViewController.h */,
 				8705EEAB1C38B2EF00A440A1 /* ZPSettingsTableViewController.m */,
+				8705EEAD1C42E4BB00A440A1 /* ZPLockSplashViewController.h */,
+				8705EEAE1C42E4BB00A440A1 /* ZPLockSplashViewController.m */,
+				8705EEB01C42F9F100A440A1 /* ZPPasscodeTableViewController.h */,
+				8705EEB11C42F9F100A440A1 /* ZPPasscodeTableViewController.m */,
 			);
 			name = settings;
 			sourceTree = "<group>";
@@ -574,7 +584,9 @@
 				873460CA1C2CDE3200A1B90D /* main.m in Sources */,
 				873461631C2DE1CD00A1B90D /* ZPAccountViewController.m in Sources */,
 				873461151C2CE72D00A1B90D /* ZPLoginViewController.m in Sources */,
+				8705EEAF1C42E4BB00A440A1 /* ZPLockSplashViewController.m in Sources */,
 				8734610B1C2CE3EE00A1B90D /* ZPTabBarController.m in Sources */,
+				8705EEB21C42F9F100A440A1 /* ZPPasscodeTableViewController.m in Sources */,
 				8715DE611C3377AB00B6D507 /* ZPHomeViewController.m in Sources */,
 				873460D01C2CDE3200A1B90D /* finals.xcdatamodeld in Sources */,
 				8705EEAC1C38B2EF00A440A1 /* ZPSettingsTableViewController.m in Sources */,

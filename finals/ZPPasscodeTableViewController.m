@@ -1,40 +1,41 @@
 //
-//  ZPSettingsTableViewController.m
+//  ZPPasscodeTableViewController.m
 //  finals
 //
-//  Created by Ziyad Parekh on 1/2/16.
+//  Created by Ziyad Parekh on 1/10/16.
 //  Copyright (c) 2016 Ziyad Parekh. All rights reserved.
 //
 
-#import <VENTouchLock/VENTouchLock.h>
-#import "ZPSettingsTableViewController.h"
 #import "ZPPasscodeTableViewController.h"
-#import "ZPUtility.h"
-#import "AppDelegate.h"
+#import <VENTouchLock/VENTouchLock.h>
+#import "ZPLockSplashViewController.h"
+#import "UIColor+ZPColors.h"
 
-@interface ZPSettingsTableViewController ()
-
-- (void)handleTouchPasscodeLockCell;
+@interface ZPPasscodeTableViewController ()
 
 @end
 
-@implementation ZPSettingsTableViewController
+@implementation ZPPasscodeTableViewController
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.title = @"Settings";
+    self.navigationItem.title = @"Passcode Lock";
+    
+    if ([[VENTouchLock sharedInstance] isPasscodeSet]) {
+        ZPLockSplashViewController *lockSplashVC = [[ZPLockSplashViewController alloc] init];
+        [self.navigationController presentViewController:lockSplashVC animated:YES completion:nil];
+    }
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -46,18 +47,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
-    return 3;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    if (section == 0) {
-        return 3;
-    } else if (section == 1) {
-        return 2;
-    } else {
-        return 1;
-    }
+    return 1;
 }
 
 
@@ -67,42 +62,15 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    
-    if (indexPath.section == 1 && indexPath.row == 1) {
-        cell.textLabel.text = @"Passcode Lock";
-        cell.textLabel.textAlignment = NSTextAlignmentLeft;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.accessoryType = [[VENTouchLock sharedInstance] isPasscodeSet] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-    }
-    
-    if (indexPath.section == 2) {
-        cell.textLabel.text = @"Logout";
-        cell.textLabel.textAlignment = NSTextAlignmentCenter;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        [cell.textLabel setTextColor:[UIColor redColor]];
-    }
-    
-    // Configure the cell...
-    
+    cell.textLabel.text = @"Turn Passcode Off";
+    cell.textLabel.textColor = [UIColor zp_venmoBlueColor];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 2) {
-        [(AppDelegate *)[[UIApplication sharedApplication] delegate] logOut];
-    } else if (indexPath.section == 1 && indexPath.row == 1) {
-        [self handleTouchPasscodeLockCell];
-    }
-}
-
-- (void)handleTouchPasscodeLockCell {
-    if ([[VENTouchLock sharedInstance] isPasscodeSet]) {
-        ZPPasscodeTableViewController *passcodeTableVC = [[ZPPasscodeTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        [self.navigationController pushViewController:passcodeTableVC animated:YES];
-    } else {
-        VENTouchLockCreatePasscodeViewController *createPasscodeVC = [[VENTouchLockCreatePasscodeViewController alloc] init];
-        [self presentViewController:[createPasscodeVC embeddedInNavigationController] animated:YES completion:nil];
-    }
+    [[VENTouchLock sharedInstance] deletePasscode];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 /*

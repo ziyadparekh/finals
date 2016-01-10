@@ -24,4 +24,6 @@
 + (NSString *)firstNameForDisplayName:(NSString *)displayName;
 + (NSString *)formattedLowerCaseName:(NSString *)name;
 
++ (UIAlertController *)presentAlertControllerWithTitle:(NSString *)title message:(NSString *)message;
+
 @end
