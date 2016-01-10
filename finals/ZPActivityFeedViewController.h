@@ -7,6 +7,7 @@
 //
 
 #import "PFQueryTableViewController.h"
+#import <ParseUI/ParseUI.h>
 #import "ZPActivityTableViewCell.h"
 
 @interface ZPActivityFeedViewController : PFQueryTableViewController <ZPActivityTableViewCellDelegate>

@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
 
 @interface ZPComposeViewController : UIViewController
-
+- (id)initWithUser:(PFUser *)aUser;
 @end

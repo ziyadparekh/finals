@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Ziyad Parekh. All rights reserved.
 //
 
+#import <FontAwesomeKit/FAKFontAwesome.h>
 #import "ZPTabBarController.h"
 #import "UIColor+ZPColors.h"
 
@@ -21,9 +22,9 @@
     // Do any additional setup after loading the view.
     
     // color for active tab
-    self.tabBar.tintColor = [UIColor zp_buttonBlueColor];
+    self.tabBar.tintColor = [UIColor whiteColor];
     // color for tab bar background
-    self.tabBar.barTintColor = [UIColor zp_darkGreyColor];
+    self.tabBar.barTintColor = [UIColor zp_drawerBackgroundColor];
     
     self.navController = [[UINavigationController alloc] init];
 }
@@ -37,11 +38,16 @@
 - (void)setViewControllers:(NSArray *)viewControllers animated:(BOOL)animated {
     [super setViewControllers:viewControllers animated:animated];
     
+    FAKFontAwesome *composeIcon = [FAKFontAwesome pencilSquareIconWithSize:30];
+    [composeIcon addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
+    UIImage *composeImage = [composeIcon imageWithSize:CGSizeMake(30, 30)];
+    
     UIButton *composeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     composeButton.frame = CGRectMake(2 * (self.tabBar.bounds.size.width/5), 0.0f, (self.tabBar.bounds.size.width/5), self.tabBar.bounds.size.height);
-    [composeButton setImage:[UIImage imageNamed:@"ComposeDefault"] forState:UIControlStateNormal];
-    [composeButton setImage:[UIImage imageNamed:@"ComposeSelected"] forState:UIControlStateHighlighted];
+    [composeButton setImage:composeImage forState:UIControlStateNormal];
+    [composeButton setImage:composeImage forState:UIControlStateHighlighted];
     [composeButton addTarget:self action:@selector(didPressComposeTransactionButton:) forControlEvents:UIControlEventTouchUpInside];
+    [composeButton setBackgroundColor:[UIColor zp_venmoBlueColor]];
     
     [self.tabBar addSubview:composeButton];
 }

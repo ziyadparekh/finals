@@ -9,7 +9,6 @@
 #import "ZPComposeViewController.h"
 #import <VENTokenField/VENTokenField.h>
 #import <VENCalculatorInputView/VENCalculatorInputTextField.h>
-#import <Parse/Parse.h>
 #import "ZPConstants.h"
 #import "ZPUtility.h"
 #import "ZPUserTableViewCell.h"
@@ -17,7 +16,7 @@
 #import <UITextView+Placeholder/UITextView+Placeholder.h>
 #import <MBProgressHUD/MBProgressHUD.h>
 
-@interface ZPComposeViewController () <VENTokenFieldDelegate, VENTokenFieldDataSource, UITableViewDataSource, UITableViewDelegate, ZPUserTableViewCellDelegate, UITextViewDelegate, VENCalculatorInputViewDelegate, UITextFieldDelegate>
+@interface ZPComposeViewController () <VENTokenFieldDelegate, VENTokenFieldDataSource, UITableViewDataSource, UITableViewDelegate, ZPUserTableViewCellDelegate, UITextViewDelegate, VENCalculatorInputViewDelegate, UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) IBOutlet VENTokenField *tokenField;
 @property (strong, nonatomic) IBOutlet VENCalculatorInputTextField *calcInputTextField;
@@ -29,12 +28,15 @@
 @property (strong, nonatomic) NSMutableArray *names;
 @property (strong, nonatomic) NSMutableArray *selectedNames;
 @property (assign, nonatomic) float keyboardHeight;
+@property (assign, nonatomic) NSUInteger totalAmount;
 @property (assign, nonatomic) NSUInteger _expectedTransactionsCount;
 @property (assign, nonatomic) NSUInteger _processedTransactionsCount;
+@property (strong, nonatomic) PFUser *initialUser;
 
 @end
 
 @implementation ZPComposeViewController
+@synthesize initialUser;
 @synthesize tokenField;
 @synthesize calcInputTextField;
 @synthesize tableView;
@@ -47,6 +49,16 @@
 @synthesize keyboardHeight;
 @synthesize _expectedTransactionsCount;
 @synthesize _processedTransactionsCount;
+
+
+- (id)initWithUser:(PFUser *)aUser {
+    self = [super init];
+    if (self) {
+        self.initialUser = aUser;
+    }
+    return self;
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -71,9 +83,9 @@
 
     UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20.0f, 20)];
     
-    self.calcInputTextField = [[VENCalculatorInputTextField alloc] initWithFrame: CGRectMake(0.0f, self.navigationController.navigationBar.frame.size.height + 62.0f, self.view.bounds.size.width, 30.0f)];
-    self.calcInputTextField.placeholder = @"RS0.00";
-    self.calcInputTextField.font = [UIFont boldSystemFontOfSize:12.0f];
+    self.calcInputTextField = [[VENCalculatorInputTextField alloc] initWithFrame: CGRectMake(0.0f, self.navigationController.navigationBar.frame.size.height + 62.0f, self.view.bounds.size.width, 40.0f)];
+    self.calcInputTextField.placeholder = @"Rs0.00";
+    self.calcInputTextField.font = [UIFont boldSystemFontOfSize:14.0f];
     [self.calcInputTextField setTextAlignment:NSTextAlignmentLeft];
     [self.calcInputTextField setTextColor:[UIColor zp_darkGreyColor]];
     self.calcInputTextField.layer.borderColor = [UIColor zp_lightGreyColor].CGColor;
@@ -89,14 +101,14 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
-
-    self.noteTextView = [[UITextView alloc] initWithFrame:CGRectMake(15.0f, self.navigationController.navigationBar.frame.size.height + 92.0f, self.view.bounds.size.width - 30.0f, 100.0f)];
+    self.noteTextView = [[UITextView alloc] initWithFrame:CGRectMake(15.0f, self.navigationController.navigationBar.frame.size.height + 102.0f, self.view.bounds.size.width - 30.0f, 100.0f)];
     self.noteTextView.editable = YES;
     self.noteTextView.placeholder = @"What's it for?";
     self.noteTextView.hidden = YES;
     self.noteTextView.delegate = self;
     self.noteTextView.autocorrectionType = UITextAutocorrectionTypeDefault;
     self.noteTextView.inputAccessoryView = self.accessoryView;
+    self.noteTextView.font = [UIFont systemFontOfSize:14.0f];
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.tokenField];
@@ -107,6 +119,11 @@
     [self.navigationItem setHidesBackButton:YES];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelButtonAction:)];
+    self.navigationItem.title = @"Transact";
+    
+    if (self.initialUser) {
+        [self updateTokenViewWithNewData:self.initialUser];
+    }
 }
 
 - (void)createAccessoryView {
@@ -132,8 +149,7 @@
     
 }
 
-- (void)cancelButtonAction:(id)sender {
-    [self resignFirstResponder];
+- (IBAction)cancelButtonAction:(id)sender {
     [self.parentViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -145,39 +161,54 @@
     self.confirmButtonView.enabled = NO;
     self.navigationItem.leftBarButtonItem.enabled = NO;
     
-    [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
+    UIWindow *tempKeyboardWindow = [[[UIApplication sharedApplication] windows] objectAtIndex:1];
+    MBProgressHUD *hud=[[MBProgressHUD alloc] initWithWindow:tempKeyboardWindow];
+    hud.mode=MBProgressHUDModeIndeterminate;
+    [tempKeyboardWindow addSubview:hud];
+    [hud show:YES];
+    
+    //[MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
     
     _expectedTransactionsCount = self.selectedNames.count;
     _processedTransactionsCount = 0;
     
+    self.totalAmount = [self.calcInputTextField.text floatValue] * self.selectedNames.count;
+    
     PFObject *transaction = [PFObject objectWithClassName:kZPTransactionObjectKey];
     [transaction setObject:self.noteTextView.text forKey:kZPTransactionNoteKey];
     [transaction setObject:self.calcInputTextField.text forKey:kZPTransactionAmountKey];
+    [transaction setObject:[NSString stringWithFormat:@"%li", (unsigned long)self.totalAmount] forKey:kZPTransactionTotalAmountKey];
     
-    [[PFUser currentUser] fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        if (error) {
-            NSLog(@"error fetching current user information");
-            return;
-        }
-        NSLog(@"fetched latest for current user...");
+    __block NSError *errorString = nil;
+    dispatch_queue_t backgroundQueue = dispatch_queue_create("com.mycompany.myqueue", 0);
+    dispatch_async(backgroundQueue, ^{
         [ZPUtility submitTransaction:transaction toUsers:self.selectedNames block:^(BOOL succeeded, NSError *error) {
-            _processedTransactionsCount++;
-            if (error) {
-                NSLog(@"error processing transaction for %@", [self.selectedNames[_processedTransactionsCount] objectId]);
-                return;
-            } else {
-                if (_processedTransactionsCount == _expectedTransactionsCount) {
-                    [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
-                    [self cancelButtonAction:self];
-                }
-            }
+            errorString = error;
         }];
-    }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [hud hide:YES];
+            if (errorString == nil) {
+                [self cancelButtonAction:self];
+            } else {
+                [self presentAlertControllerWithTitle:@"Error" message:@"There was error processing your payment"];
+            }
+        });
+    });
+}
+
+- (void)presentAlertControllerWithTitle:(NSString *)title message:(NSString *)message {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [alertController dismissViewControllerAnimated:YES completion:nil];
+        [self cancelButtonAction:self];
+    }]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)validatePaymentAction:(id)sender {
     if (self.selectedNames.count < 1) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"Please select atleast one person" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"Please select at least one person" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         [alertView show];
     } else if ([self.calcInputTextField.text floatValue] < 1.0) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"Please enter an amount greater than Rs0.00" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -216,10 +247,11 @@
 
 - (void)dismissTableView:(id)sender {
     self.tableView.hidden = YES;
-    self.tableView.hidden = YES;
     self.noteTextView.hidden = NO;
     self.calcInputTextField.hidden = NO;
+    [self.tokenField resignFirstResponder];
     [self.tokenField reloadData];
+    [self.tokenField collapse];
     [self setRightBarButtonItemToTotalAmount];
 }
 
@@ -271,26 +303,26 @@
 
 - (void)tokenFieldDidBeginEditing:(VENTokenField * __nonnull)tokenField {
     self.tableView.frame = CGRectMake(0.0f, self.navigationController.navigationBar.frame.size.height + 20.0f + self.tokenField.bounds.size.height, self.view.bounds.size.width, self.view.bounds.size.height - (self.navigationController.navigationBar.frame.size.height + 20.0f + self.tokenField.bounds.size.height));
+    [self setDismissTableViewButtonIfNeccessary];
     self.tableView.hidden = NO;
     self.noteTextView.hidden = YES;
     self.calcInputTextField.hidden = YES;
 }
 
 - (void)setDismissTableViewButtonIfNeccessary {
-    if (self.selectedNames.count >=1) {
+    if (self.selectedNames.count >= 1 && self.tableView.hidden == NO) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStylePlain target:self action:@selector(dismissTableView:)];
     } else {
         self.navigationItem.rightBarButtonItem = nil;
     }
 }
 
+
 - (void)tokenField:(VENTokenField * __nonnull)tokenField didChangeText:(nullable NSString *)text {
     
     if ([text length] == 0) {
         return;
     }
-
-    [self setDismissTableViewButtonIfNeccessary];
     
     PFQuery *searchQuery = [PFQuery queryWithClassName:kZPUserClass];
     [searchQuery whereKey:kZPUserLowercaseNameKey containsString:[text lowercaseString]];
@@ -344,7 +376,6 @@
     
     PFObject *object = [self.names objectAtIndex:indexPath.row];
     [cell setUser:(PFUser*)object];
-    [cell.photoLabel setText:@"0 photos"];
     cell.tag = indexPath.row;
     
     if ([self doesArray:self.selectedNames ContainItem:[object objectId]]) {
@@ -380,6 +411,7 @@
     self.tableView.hidden = YES;
     self.noteTextView.hidden = NO;
     self.calcInputTextField.hidden = NO;
+    [self setDismissTableViewButtonIfNeccessary];
 }
 
 - (BOOL)doesArray:(NSMutableArray *)array ContainItem:(NSString *)item {

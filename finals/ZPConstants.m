@@ -37,6 +37,7 @@ NSString *const kZPTransactionKey                              = @"Transactions"
 
 // Field keys
 NSString *const kZPTransactionAmountKey                        = @"amount";
+NSString *const kZPTransactionTotalAmountKey                   = @"totalAmount";
 NSString *const kZPTransactionNoteKey                          = @"note";
 NSString *const kZPTransactionFromUserKey                      = @"fromUser";
 NSString *const kZPTransactionToUserKey                        = @"toUser";

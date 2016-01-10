@@ -17,6 +17,9 @@ PODS:
     - FBSDKCoreKit/arc
   - FBSDKLoginKit (4.8.0):
     - FBSDKCoreKit
+  - FontAwesomeKit/Core (2.2.0)
+  - FontAwesomeKit/FontAwesome (2.2.0):
+    - FontAwesomeKit/Core
   - FormatterKit (1.8.0):
     - FormatterKit/AddressFormatter (= 1.8.0)
     - FormatterKit/ArrayFormatter (= 1.8.0)
@@ -59,6 +62,7 @@ PODS:
 
 DEPENDENCIES:
   - EDColor (~> 1.0)
+  - FontAwesomeKit/FontAwesome
   - FormatterKit
   - MBProgressHUD
   - Parse (= 1.09)
@@ -75,6 +79,7 @@ SPEC CHECKSUMS:
   EDColor: c83f9a61f9f9b3c23d541f1feb561558e29cb088
   FBSDKCoreKit: 66a935d17b6e00b6b64e604f2eb9b72c9ab7deb8
   FBSDKLoginKit: d893fcbb98d854496925e9ff73c67b896982d3c4
+  FontAwesomeKit: 025fd4dd1017fe4e3f8d47b03e024deedbb33cd4
   FormatterKit: bddde83e054edf9d9ee14f9de3b3a5103db256f4
   FrameAccessor: 0f7ba6ce37be9a5d0302a27c731dca70af8d438b
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1

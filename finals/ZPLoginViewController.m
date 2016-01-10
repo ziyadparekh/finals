@@ -24,6 +24,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    
     // Do any additional setup after loading the view.
     //Position of the Facebook button
     CGFloat yPosition = 360.0f;

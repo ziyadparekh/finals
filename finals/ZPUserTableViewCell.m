@@ -26,7 +26,6 @@
 @synthesize avatarImageView;
 @synthesize avatarImageButton;
 @synthesize nameButton;
-@synthesize photoLabel;
 
 #pragma mark - NSObject
 
@@ -37,13 +36,15 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
         self.avatarImageView = [[ZPProfileImageView alloc] init];
-        self.avatarImageView.frame = CGRectMake( 0.0f, 0.0f, 50.0f, 50.0f);
+        self.avatarImageView.frame = CGRectMake( 5.0f, 5.0f, 40.0f, 40.0f);
         self.avatarImageView.layer.masksToBounds = YES;
+        self.avatarImageView.layer.cornerRadius = 20.0f;
         [self.contentView addSubview:self.avatarImageView];
         
         self.avatarImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.avatarImageButton.backgroundColor = [UIColor clearColor];
-        self.avatarImageButton.frame = CGRectMake( 0.0f, 0.0f, 50.0f, 50.0f);
+        self.avatarImageButton.frame = CGRectMake( 5.0f, 5.0f, 40.0f, 40.0f);
+        self.avatarImageButton.layer.cornerRadius = 20.0f;
         [self.avatarImageButton addTarget:self action:@selector(didTapUserButtonAction:)
                          forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:self.avatarImageButton];
@@ -52,19 +53,11 @@
         self.nameButton.backgroundColor = [UIColor clearColor];
         self.nameButton.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
         self.nameButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-        [self.nameButton setTitleColor:[UIColor zp_greyColor]
-                              forState:UIControlStateNormal];
-        [self.nameButton setTitleColor:[UIColor zp_lightGreyColor]
-                              forState:UIControlStateHighlighted];
-        [self.nameButton addTarget:self action:@selector(didTapUserButtonAction:)
-                  forControlEvents:UIControlEventTouchUpInside];
+        [self.nameButton setTitleColor:[UIColor zp_darkGreyColor] forState:UIControlStateNormal];
+        [self.nameButton setTitleColor:[UIColor zp_lightGreyColor] forState:UIControlStateHighlighted];
+        [self.nameButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:self.nameButton];
         
-        self.photoLabel = [[UILabel alloc] init];
-        self.photoLabel.font = [UIFont systemFontOfSize:11.0f];
-        self.photoLabel.textColor = [UIColor grayColor];
-        self.photoLabel.backgroundColor = [UIColor clearColor];
-        [self.contentView addSubview:self.photoLabel];
     }
     return self;
 }
@@ -90,14 +83,7 @@
     [self.nameButton setTitle:[self.user objectForKey:kZPUserDisplayNameKey] forState:UIControlStateNormal];
     [self.nameButton setTitle:[self.user objectForKey:kZPUserDisplayNameKey] forState:UIControlStateHighlighted];
     
-    [self.nameButton setFrame:CGRectMake( 60.0f, 5.0f, nameSize.width, nameSize.height)];
-    
-    // Set photo number label
-    CGSize photoLabelSize = [@"photos" boundingRectWithSize:CGSizeMake(144.0f, CGFLOAT_MAX)
-                                                    options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin
-                                                 attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.0f]}
-                                                    context:nil].size;
-    [self.photoLabel setFrame:CGRectMake( 60.0f, 5.0f + nameSize.height, 140.0f, photoLabelSize.height)];
+    [self.nameButton setFrame:CGRectMake( 60.0f, 15.0f, nameSize.width, nameSize.height)];
     
 }
 

@@ -43,6 +43,7 @@ extern NSString *const kZPTransactionKey;
 
 // Field keys
 extern NSString *const kZPTransactionAmountKey;
+extern NSString *const kZPTransactionTotalAmountKey;
 extern NSString *const kZPTransactionNoteKey;
 extern NSString *const kZPTransactionFromUserKey;
 extern NSString *const kZPTransactionToUserKey;

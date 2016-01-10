@@ -20,7 +20,6 @@
 
 /*! The user represented in the cell */
 @property (nonatomic, strong) PFUser *user;
-@property (nonatomic, strong) UILabel *photoLabel;
 
 /*! Setters for the cell's content */
 - (void)setUser:(PFUser *)user;

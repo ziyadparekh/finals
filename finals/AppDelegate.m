@@ -14,11 +14,13 @@
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <Parse/Parse.h>
 #import <ParseFacebookUtilsV4.h>
+#import <FontAwesomeKit/FAKFontAwesome.h>
 #import "ParseCrashReporting.h"
 #import "ZPWelcomeViewController.h"
 #import "ZPHomeViewController.h"
 #import "ZPActivityFeedViewController.h"
 #import "ZPAccountViewController.h"
+#import "ZPSettingsTableViewController.h"
 #import "UIColor+ZPColors.h"
 
 @interface AppDelegate () {
@@ -29,6 +31,7 @@
 @property (strong, nonatomic) ZPHomeViewController *homeViewController;
 @property (strong, nonatomic) ZPAccountViewController *accountViewController;
 @property (strong, nonatomic) ZPActivityFeedViewController *activityViewController;
+@property (strong, nonatomic) ZPSettingsTableViewController *settingsTableViewController;
 
 @property (strong, nonatomic) MBProgressHUD *hud;
 
@@ -76,6 +79,8 @@
     self.window.rootViewController = self.navController;
     [self.window makeKeyAndVisible];
     
+    //[self logOut];
+    
     return YES;
 }
 
@@ -84,20 +89,37 @@
     self.homeViewController = [[ZPHomeViewController alloc] initWithStyle:UITableViewStylePlain];
     self.accountViewController = [[ZPAccountViewController alloc] initWithStyle:UITableViewStylePlain];
     self.activityViewController = [[ZPActivityFeedViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.settingsTableViewController = [[ZPSettingsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
     
     UINavigationController *homeNavigationController = [[UINavigationController alloc] initWithRootViewController:self.homeViewController];
     UINavigationController *activityNavigationController = [[UINavigationController alloc] initWithRootViewController:self.activityViewController];
-    UINavigationController *settingsNavigationController = [[UINavigationController alloc] init];
+    UINavigationController *settingsNavigationController = [[UINavigationController alloc] initWithRootViewController:self.settingsTableViewController];
     UINavigationController *emptyNavigationController = [[UINavigationController alloc] init];
     UINavigationController *profileNavigationController = [[UINavigationController alloc] initWithRootViewController:self.accountViewController];
     
-    UITabBarItem *homeTabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Home", @"Home") image:[[UIImage imageNamed:@"ActivityFeedDefault.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"ActivityFeedSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    FAKFontAwesome *homeIcon = [FAKFontAwesome homeIconWithSize:30];
+    [homeIcon addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
+    UIImage *homeImage = [homeIcon imageWithSize:CGSizeMake(30, 30)];
     
-    UITabBarItem *profileTabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Profile", @"Profile") image:[[UIImage imageNamed:@"ProfileDefault"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"ProfileSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    FAKFontAwesome *activityIcon = [FAKFontAwesome globeIconWithSize:30];
+    [activityIcon addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
+    UIImage *activityImage = [activityIcon imageWithSize:CGSizeMake(30, 30)];
     
-    UITabBarItem *activityTabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Notifications", @"Notifications") image:[[UIImage imageNamed:@"NotificationsDefault.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"NotificationsSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    FAKFontAwesome *profleIcon = [FAKFontAwesome userIconWithSize:30];
+    [profleIcon addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
+    UIImage *profleImage = [profleIcon imageWithSize:CGSizeMake(30, 30)];
     
-    UITabBarItem *settingsTabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Settings", @"Settings") image:[[UIImage imageNamed:@"SettingsDefault.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"SettingsSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    FAKFontAwesome *cogsIcon = [FAKFontAwesome cogIconWithSize:30];
+    [cogsIcon addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
+    UIImage *cogsImage = [cogsIcon imageWithSize:CGSizeMake(30, 30)];
+    
+    UITabBarItem *homeTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Home" image:homeImage selectedImage:homeImage];
+    
+    UITabBarItem *profileTabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Profile", @"Profile") image:profleImage selectedImage:profleImage];
+    
+    UITabBarItem *activityTabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Activity", @"Activity") image:activityImage selectedImage:activityImage];
+    
+    UITabBarItem *settingsTabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Settings", @"Settings") image:cogsImage selectedImage:cogsImage];
 
     [homeNavigationController setTabBarItem:homeTabBarItem];
     [activityNavigationController setTabBarItem:activityTabBarItem];
@@ -130,6 +152,13 @@
                                                            NSForegroundColorAttributeName:[UIColor whiteColor]
                                                            }
                                                 forState:UIControlStateNormal];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]} forState:UIControlStateSelected];
+    
+    [[UITabBarItem appearance] setTitleTextAttributes:@{
+                                                           NSForegroundColorAttributeName:[UIColor whiteColor]
+                                                           }
+                                                forState:UIControlStateNormal];
+    [[UITabBarItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]} forState:UIControlStateSelected];
     
     [[UITextView appearance] setTintColor:[UIColor zp_venmoBlueColor]];
     

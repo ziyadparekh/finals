@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8705EEAC1C38B2EF00A440A1 /* ZPSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8705EEAB1C38B2EF00A440A1 /* ZPSettingsTableViewController.m */; };
 		8715DE551C3202F000B6D507 /* ZPBaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8715DE541C3202F000B6D507 /* ZPBaseTableViewCell.m */; };
 		8715DE581C32154700B6D507 /* ZPActivityTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8715DE571C32154700B6D507 /* ZPActivityTableViewCell.m */; };
 		8715DE5B1C32215100B6D507 /* ZPActivityFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8715DE5A1C32215100B6D507 /* ZPActivityFeedViewController.m */; };
@@ -52,26 +53,15 @@
 		873461431C2DD47B00A1B90D /* UIImage+ResizeAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 873461421C2DD47B00A1B90D /* UIImage+ResizeAdditions.m */; };
 		873461471C2DD51300A1B90D /* UIImage+RoundedCornerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 873461461C2DD51300A1B90D /* UIImage+RoundedCornerAdditions.m */; };
 		8734614A1C2DD54900A1B90D /* UIImage+AlphaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 873461491C2DD54900A1B90D /* UIImage+AlphaAdditions.m */; };
-		8734614D1C2DDC0C00A1B90D /* ActivityFeedDefault.png in Resources */ = {isa = PBXBuildFile; fileRef = 8734614B1C2DDC0C00A1B90D /* ActivityFeedDefault.png */; };
-		8734614E1C2DDC0C00A1B90D /* ActivityFeedSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 8734614C1C2DDC0C00A1B90D /* ActivityFeedSelected.png */; };
-		873461591C2DDF4B00A1B90D /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 873461581C2DDF4B00A1B90D /* TableViewController.m */; };
 		873461631C2DE1CD00A1B90D /* ZPAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 873461621C2DE1CD00A1B90D /* ZPAccountViewController.m */; };
-		8734616A1C2DE6A900A1B90D /* NotificationsDefault.png in Resources */ = {isa = PBXBuildFile; fileRef = 873461681C2DE6A900A1B90D /* NotificationsDefault.png */; };
-		8734616B1C2DE6A900A1B90D /* NotificationsSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 873461691C2DE6A900A1B90D /* NotificationsSelected.png */; };
-		8734616F1C2DE74100A1B90D /* ProfileSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 8734616D1C2DE74100A1B90D /* ProfileSelected.png */; };
-		873461711C2DE78F00A1B90D /* ProfileDefault.png in Resources */ = {isa = PBXBuildFile; fileRef = 873461701C2DE78F00A1B90D /* ProfileDefault.png */; };
-		873461741C2DE81900A1B90D /* ComposeDefault.png in Resources */ = {isa = PBXBuildFile; fileRef = 873461721C2DE81900A1B90D /* ComposeDefault.png */; };
-		873461751C2DE81900A1B90D /* ComposeSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 873461731C2DE81900A1B90D /* ComposeSelected.png */; };
-		873461781C2DE88B00A1B90D /* SettingsDefault.png in Resources */ = {isa = PBXBuildFile; fileRef = 873461761C2DE88B00A1B90D /* SettingsDefault.png */; };
-		873461791C2DE88B00A1B90D /* SettingsSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 873461771C2DE88B00A1B90D /* SettingsSelected.png */; };
 		8734617C1C2E0DBA00A1B90D /* ZPComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8734617B1C2E0DBA00A1B90D /* ZPComposeViewController.m */; };
 		8734617E1C2E138900A1B90D /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8734617D1C2E138900A1B90D /* AdSupport.framework */; };
 		873461811C2E146500A1B90D /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 873461801C2E146500A1B90D /* UIImage+ImageEffects.m */; };
 		873461841C2E2DFD00A1B90D /* UIColor+ZPColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 873461831C2E2DFD00A1B90D /* UIColor+ZPColors.m */; };
-		873461861C2E4CEE00A1B90D /* FriendsIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 873461851C2E4CEE00A1B90D /* FriendsIcon.png */; };
 		8734618C1C2F421E00A1B90D /* ZPUserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8734618B1C2F421E00A1B90D /* ZPUserTableViewCell.m */; };
 		8734618F1C2F444800A1B90D /* ZPProfileImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8734618E1C2F444800A1B90D /* ZPProfileImageView.m */; };
 		876BDFB216CF5128263E038C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 248CE5B63E18913EE5FDC572 /* libPods.a */; };
+		87EC1D191C388D5300B6CBE8 /* profile_default.png in Resources */ = {isa = PBXBuildFile; fileRef = 87EC1D181C388D5300B6CBE8 /* profile_default.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +77,8 @@
 /* Begin PBXFileReference section */
 		248CE5B63E18913EE5FDC572 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		778E6E8793F77075E3957A30 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		8705EEAA1C38B2EF00A440A1 /* ZPSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPSettingsTableViewController.h; sourceTree = "<group>"; };
+		8705EEAB1C38B2EF00A440A1 /* ZPSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPSettingsTableViewController.m; sourceTree = "<group>"; };
 		8715DE531C3202F000B6D507 /* ZPBaseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPBaseTableViewCell.h; sourceTree = "<group>"; };
 		8715DE541C3202F000B6D507 /* ZPBaseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPBaseTableViewCell.m; sourceTree = "<group>"; };
 		8715DE561C32154700B6D507 /* ZPActivityTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPActivityTableViewCell.h; sourceTree = "<group>"; };
@@ -149,20 +141,8 @@
 		873461461C2DD51300A1B90D /* UIImage+RoundedCornerAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCornerAdditions.m"; sourceTree = "<group>"; };
 		873461481C2DD54900A1B90D /* UIImage+AlphaAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+AlphaAdditions.h"; sourceTree = "<group>"; };
 		873461491C2DD54900A1B90D /* UIImage+AlphaAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+AlphaAdditions.m"; sourceTree = "<group>"; };
-		8734614B1C2DDC0C00A1B90D /* ActivityFeedDefault.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ActivityFeedDefault.png; sourceTree = "<group>"; };
-		8734614C1C2DDC0C00A1B90D /* ActivityFeedSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ActivityFeedSelected.png; sourceTree = "<group>"; };
-		873461571C2DDF4B00A1B90D /* TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
-		873461581C2DDF4B00A1B90D /* TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
 		873461611C2DE1CD00A1B90D /* ZPAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPAccountViewController.h; sourceTree = "<group>"; };
 		873461621C2DE1CD00A1B90D /* ZPAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPAccountViewController.m; sourceTree = "<group>"; };
-		873461681C2DE6A900A1B90D /* NotificationsDefault.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NotificationsDefault.png; sourceTree = "<group>"; };
-		873461691C2DE6A900A1B90D /* NotificationsSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NotificationsSelected.png; sourceTree = "<group>"; };
-		8734616D1C2DE74100A1B90D /* ProfileSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProfileSelected.png; sourceTree = "<group>"; };
-		873461701C2DE78F00A1B90D /* ProfileDefault.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProfileDefault.png; sourceTree = "<group>"; };
-		873461721C2DE81900A1B90D /* ComposeDefault.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ComposeDefault.png; sourceTree = "<group>"; };
-		873461731C2DE81900A1B90D /* ComposeSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ComposeSelected.png; sourceTree = "<group>"; };
-		873461761C2DE88B00A1B90D /* SettingsDefault.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SettingsDefault.png; sourceTree = "<group>"; };
-		873461771C2DE88B00A1B90D /* SettingsSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SettingsSelected.png; sourceTree = "<group>"; };
 		8734617A1C2E0DBA00A1B90D /* ZPComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPComposeViewController.h; sourceTree = "<group>"; };
 		8734617B1C2E0DBA00A1B90D /* ZPComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPComposeViewController.m; sourceTree = "<group>"; };
 		8734617D1C2E138900A1B90D /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -170,11 +150,11 @@
 		873461801C2E146500A1B90D /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		873461821C2E2DFD00A1B90D /* UIColor+ZPColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+ZPColors.h"; sourceTree = "<group>"; };
 		873461831C2E2DFD00A1B90D /* UIColor+ZPColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+ZPColors.m"; sourceTree = "<group>"; };
-		873461851C2E4CEE00A1B90D /* FriendsIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FriendsIcon.png; sourceTree = "<group>"; };
 		8734618A1C2F421E00A1B90D /* ZPUserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPUserTableViewCell.h; sourceTree = "<group>"; };
 		8734618B1C2F421E00A1B90D /* ZPUserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPUserTableViewCell.m; sourceTree = "<group>"; };
 		8734618D1C2F444800A1B90D /* ZPProfileImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPProfileImageView.h; sourceTree = "<group>"; };
 		8734618E1C2F444800A1B90D /* ZPProfileImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPProfileImageView.m; sourceTree = "<group>"; };
+		87EC1D181C388D5300B6CBE8 /* profile_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_default.png; sourceTree = "<group>"; };
 		C547E95395F8D54B8E2A1361 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -303,17 +283,7 @@
 		873461081C2CE2FC00A1B90D /* assets */ = {
 			isa = PBXGroup;
 			children = (
-				873461851C2E4CEE00A1B90D /* FriendsIcon.png */,
-				873461761C2DE88B00A1B90D /* SettingsDefault.png */,
-				873461771C2DE88B00A1B90D /* SettingsSelected.png */,
-				873461721C2DE81900A1B90D /* ComposeDefault.png */,
-				873461731C2DE81900A1B90D /* ComposeSelected.png */,
-				873461701C2DE78F00A1B90D /* ProfileDefault.png */,
-				8734616D1C2DE74100A1B90D /* ProfileSelected.png */,
-				873461681C2DE6A900A1B90D /* NotificationsDefault.png */,
-				873461691C2DE6A900A1B90D /* NotificationsSelected.png */,
-				8734614B1C2DDC0C00A1B90D /* ActivityFeedDefault.png */,
-				8734614C1C2DDC0C00A1B90D /* ActivityFeedSelected.png */,
+				87EC1D181C388D5300B6CBE8 /* profile_default.png */,
 				873460F81C2CE2E900A1B90D /* Default-568h@2x.png */,
 				873460F91C2CE2E900A1B90D /* Default-667h@2x.png */,
 				873460FA1C2CE2E900A1B90D /* Default-736h@3x.png */,
@@ -366,8 +336,8 @@
 		873461561C2DDF2F00A1B90D /* settings */ = {
 			isa = PBXGroup;
 			children = (
-				873461571C2DDF4B00A1B90D /* TableViewController.h */,
-				873461581C2DDF4B00A1B90D /* TableViewController.m */,
+				8705EEAA1C38B2EF00A440A1 /* ZPSettingsTableViewController.h */,
+				8705EEAB1C38B2EF00A440A1 /* ZPSettingsTableViewController.m */,
 			);
 			name = settings;
 			sourceTree = "<group>";
@@ -533,26 +503,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				873461741C2DE81900A1B90D /* ComposeDefault.png in Resources */,
 				873461031C2CE2E900A1B90D /* Default-fb231265150320768-568h@2x.png in Resources */,
 				873460D81C2CDE3200A1B90D /* Images.xcassets in Resources */,
-				8734616B1C2DE6A900A1B90D /* NotificationsSelected.png in Resources */,
-				8734616F1C2DE74100A1B90D /* ProfileSelected.png in Resources */,
-				8734614D1C2DDC0C00A1B90D /* ActivityFeedDefault.png in Resources */,
 				873461011C2CE2E900A1B90D /* Default-667h@2x.png in Resources */,
-				873461711C2DE78F00A1B90D /* ProfileDefault.png in Resources */,
-				873461781C2DE88B00A1B90D /* SettingsDefault.png in Resources */,
-				873461791C2DE88B00A1B90D /* SettingsSelected.png in Resources */,
 				873461071C2CE2E900A1B90D /* Default@2x.png in Resources */,
 				873461061C2CE2E900A1B90D /* Default.png in Resources */,
-				8734616A1C2DE6A900A1B90D /* NotificationsDefault.png in Resources */,
-				873461751C2DE81900A1B90D /* ComposeSelected.png in Resources */,
-				873461861C2E4CEE00A1B90D /* FriendsIcon.png in Resources */,
 				873461051C2CE2E900A1B90D /* Default-fb231265150320768@2x.png in Resources */,
 				873461001C2CE2E900A1B90D /* Default-568h@2x.png in Resources */,
 				873461021C2CE2E900A1B90D /* Default-736h@3x.png in Resources */,
-				8734614E1C2DDC0C00A1B90D /* ActivityFeedSelected.png in Resources */,
 				873461041C2CE2E900A1B90D /* Default-fb231265150320768.png in Resources */,
+				87EC1D191C388D5300B6CBE8 /* profile_default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -613,11 +573,11 @@
 				873461431C2DD47B00A1B90D /* UIImage+ResizeAdditions.m in Sources */,
 				873460CA1C2CDE3200A1B90D /* main.m in Sources */,
 				873461631C2DE1CD00A1B90D /* ZPAccountViewController.m in Sources */,
-				873461591C2DDF4B00A1B90D /* TableViewController.m in Sources */,
 				873461151C2CE72D00A1B90D /* ZPLoginViewController.m in Sources */,
 				8734610B1C2CE3EE00A1B90D /* ZPTabBarController.m in Sources */,
 				8715DE611C3377AB00B6D507 /* ZPHomeViewController.m in Sources */,
 				873460D01C2CDE3200A1B90D /* finals.xcdatamodeld in Sources */,
+				8705EEAC1C38B2EF00A440A1 /* ZPSettingsTableViewController.m in Sources */,
 				873461401C2DCC6F00A1B90D /* ZPUtility.m in Sources */,
 				8715DE5B1C32215100B6D507 /* ZPActivityFeedViewController.m in Sources */,
 				8715DE581C32154700B6D507 /* ZPActivityTableViewCell.m in Sources */,

@@ -19,6 +19,7 @@
 
 @property (nonatomic, strong) UINavigationController *presentingAccountNavController;
 @property (nonatomic, strong) NSDate *lastRefresh;
+@property (nonatomic, strong) UIView *blankTimelineView;
 
 @end
 
@@ -39,15 +40,6 @@
 
 #pragma mark - UIViewController
 
-//- (UINavigationController *)presentingAccountNavController {
-//    if (!_presentingAccountNavController) {
-//        
-//        ZPAccountViewController *accountViewController = [[ZPAccountViewController alloc] initWithUser:[PFUser currentUser] andBackButton:YES];
-//        _presentingAccountNavController = [[UINavigationController alloc] initWithRootViewController:accountViewController];
-//    }
-//    return _presentingAccountNavController;
-//}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -56,8 +48,23 @@
     [super viewDidLoad];
     
     self.tableView.backgroundColor = [UIColor zp_composeGreyBackgroundColor];
+    self.navigationItem.title = @"Notifications";
+    
+    self.blankTimelineView = [[UIView alloc] initWithFrame:self.tableView.bounds];
+    
+    UILabel *blankLabel = [[UILabel alloc] init];
+    [blankLabel setText:@"No transactions to display"];
+    [blankLabel setTextAlignment:NSTextAlignmentCenter];
+    [blankLabel setTextColor:[UIColor zp_horseGrey]];
+    [blankLabel setFrame:CGRectMake(0.0f, 10.0f, self.tableView.bounds.size.width, 40.0f)];
+    [self.blankTimelineView addSubview:blankLabel];
     
     lastRefresh = [[NSUserDefaults standardUserDefaults] objectForKey:kZPUserDefaultsActivityFeedViewControllerLastRefreshKey];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self loadObjects];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -85,7 +92,17 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.row < self.objects.count) {
+        return;
+    } else if (self.paginationEnabled) {
+        // load more
+        [self loadNextPage];
+    }
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.objects.count;
 }
 
 #pragma mark - PFQueryTableViewController
@@ -134,6 +151,7 @@
         self.tableView.scrollEnabled = NO;
         self.navigationController.tabBarItem.badgeValue = nil;
         NSLog(@"no objects were loaded");
+        self.tableView.tableHeaderView = self.blankTimelineView;
 //        if (!self.blankTimelineView.superview) {
 //            self.blankTimelineView.alpha = 0.0f;
 //            self.tableView.tableHeaderView = self.blankTimelineView;
@@ -145,6 +163,7 @@
     } else {
         self.tableView.tableHeaderView = nil;
         self.tableView.scrollEnabled = YES;
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         
         NSUInteger unreadCount = 0;
         for (PFObject *activity in self.objects) {
@@ -174,6 +193,21 @@
     
     [cell hideSeparator:(indexPath.row == self.objects.count - 1)];
     
+    return cell;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForNextPageAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *LoadMoreCellIdentifier = @"LoadMoreCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:LoadMoreCellIdentifier];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:LoadMoreCellIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.text = @"Load More";
+        cell.textLabel.textAlignment = NSTextAlignmentCenter;
+        cell.textLabel.font = [UIFont systemFontOfSize:14.0];
+        cell.textLabel.textColor = [UIColor zp_greyColor];
+        cell.backgroundColor = [UIColor whiteColor];
+    }
     return cell;
 }
 

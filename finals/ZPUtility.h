@@ -22,5 +22,6 @@
 + (UIImage *)defaultProfilePicture;
 
 + (NSString *)firstNameForDisplayName:(NSString *)displayName;
++ (NSString *)formattedLowerCaseName:(NSString *)name;
 
 @end

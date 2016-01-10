@@ -20,24 +20,27 @@
         return;
     }
     
+    NSError *error = nil;
+    
     PFObject *transactionActivity = [PFObject objectWithClassName:kZPTransactionKey];
     [transactionActivity setObject:[PFUser currentUser] forKey:kZPTransactionFromUserKey];
     [transactionActivity setObject:user forKey:kZPTransactionToUserKey];
     [transactionActivity setObject:kZPTransactionPaymentKey forKey:kZPTransactionTypeKey];
     [transactionActivity setObject:[transaction objectForKey:kZPTransactionAmountKey] forKey:kZPTransactionAmountKey];
+    [transactionActivity setObject:[transaction objectForKey:kZPTransactionTotalAmountKey] forKey:kZPTransactionTotalAmountKey];
     [transactionActivity setObject:[transaction objectForKey:kZPTransactionNoteKey] forKey:kZPTransactionNoteKey];
     
     PFACL *transactionAcl = [PFACL ACLWithUser:[PFUser currentUser]];
     [transactionAcl setPublicReadAccess:YES];
     [transactionAcl setWriteAccess:YES forUser:[PFUser currentUser]];
     transactionActivity.ACL = transactionAcl;
+    [transactionActivity save:&error];
     
-    [transactionActivity saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (completionBlock) {
-            completionBlock(succeeded, error);
-        }
-    }];
-    
+    if (error != nil) {
+        completionBlock(NO, error);
+    } else {
+        completionBlock(YES, error);
+    }
 }
 
 + (void)submitTransaction:(PFObject *)transaction toUsers:(NSArray *)users block:(void (^)(BOOL, NSError *))completionBlock {
@@ -98,11 +101,25 @@
 }
 
 + (UIImage *)defaultProfilePicture {
-    return [UIImage imageNamed:@"AvatarPlaceholderBig.png"];
+    return [UIImage imageNamed:@"profile_default.png"];
 }
 
 
 #pragma mark Display Name
+
++ (NSString *)formattedLowerCaseName:(NSString *)name {
+    if (!name || name.length == 0) {
+        return @"@someone";
+    }
+    NSArray *nameComponenets = [name componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *joinedComponents = [nameComponenets componentsJoinedByString:@"-"];
+    
+    if (joinedComponents.length > 50) {
+        joinedComponents = [joinedComponents substringToIndex:50];
+    }
+    return [NSString stringWithFormat:@"@%@", joinedComponents];
+    
+}
 
 + (NSString *)firstNameForDisplayName:(NSString *)displayName {
     if (!displayName || displayName.length == 0) {

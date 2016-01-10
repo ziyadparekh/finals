@@ -1,21 +1,24 @@
 //
-//  TableViewController.m
+//  ZPSettingsTableViewController.m
 //  finals
 //
-//  Created by Ziyad Parekh on 12/25/15.
-//  Copyright (c) 2015 Ziyad Parekh. All rights reserved.
+//  Created by Ziyad Parekh on 1/2/16.
+//  Copyright (c) 2016 Ziyad Parekh. All rights reserved.
 //
 
-#import "TableViewController.h"
+#import "ZPSettingsTableViewController.h"
+#import "AppDelegate.h"
 
-@interface TableViewController ()
+@interface ZPSettingsTableViewController ()
 
 @end
 
-@implementation TableViewController
+@implementation ZPSettingsTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.navigationItem.title = @"Settings";
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -32,26 +35,45 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    if (section == 0) {
+        return 3;
+    } else if (section == 1) {
+        return 2;
+    } else {
+        return 1;
+    }
 }
 
-/*
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    static NSString *cellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    }
+    if (indexPath.section == 2) {
+        cell.textLabel.text = @"Logout";
+        cell.textLabel.textAlignment = NSTextAlignmentCenter;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [cell.textLabel setTextColor:[UIColor redColor]];
+    }
     
     // Configure the cell...
     
     return cell;
 }
-*/
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 2) {
+        [(AppDelegate *)[[UIApplication sharedApplication] delegate] logOut];
+    }
+}
 
 /*
 // Override to support conditional editing of the table view.
