@@ -9,6 +9,7 @@
 #import "ZPWelcomeViewController.h"
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
+#import <VENTouchLock/VENTouchLock.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "ZPConstants.h"
 #import "ZPUtility.h"
@@ -40,7 +41,7 @@
         return;
     }
     
-    [(AppDelegate *)[[UIApplication sharedApplication] delegate] presentTabBarController];
+    [(AppDelegate *)[[UIApplication sharedApplication] delegate] presentLockSplashController];
     
     _facebookResponseCount = 0;
     [[PFUser currentUser] fetchInBackgroundWithTarget:self selector:@selector(refreshCurrentUserCallbackWithResult:error:)];

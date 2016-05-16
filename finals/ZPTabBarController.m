@@ -7,6 +7,7 @@
 //
 
 #import <FontAwesomeKit/FAKFontAwesome.h>
+#import "ZPLockSplashViewController.h"
 #import "ZPTabBarController.h"
 #import "UIColor+ZPColors.h"
 
@@ -27,6 +28,7 @@
     self.tabBar.barTintColor = [UIColor zp_drawerBackgroundColor];
     
     self.navController = [[UINavigationController alloc] init];
+    
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {

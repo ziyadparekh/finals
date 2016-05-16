@@ -23,6 +23,7 @@
 #import "ZPActivityFeedViewController.h"
 #import "ZPAccountViewController.h"
 #import "ZPSettingsTableViewController.h"
+#import "ZPLockSplashViewController.h"
 #import "UIColor+ZPColors.h"
 
 @interface AppDelegate () {
@@ -36,6 +37,8 @@
 @property (strong, nonatomic) ZPSettingsTableViewController *settingsTableViewController;
 
 @property (strong, nonatomic) MBProgressHUD *hud;
+
+@property (nonatomic, assign) BOOL hasEnteredPasscode;
 
 - (void)setupAppearance;
 
@@ -89,6 +92,17 @@
     [self.window makeKeyAndVisible];
     
     return YES;
+}
+
+- (void)presentLockSplashController {
+    if (self.hasEnteredPasscode || ![[VENTouchLock sharedInstance] isPasscodeSet]) {
+        [self presentTabBarController];
+        return;
+    }
+    self.hasEnteredPasscode = YES;
+    
+    ZPLockSplashViewController *lockSplashVC = [[ZPLockSplashViewController alloc] init];
+    [self.navController presentViewController:lockSplashVC animated:NO completion:nil];
 }
 
 - (void)presentTabBarController {
@@ -213,6 +227,7 @@
     
     [self presentLoginViewController];
     
+    self.hasEnteredPasscode = NO;
     self.homeViewController = nil;
     self.accountViewController = nil;
     self.activityViewController = nil;

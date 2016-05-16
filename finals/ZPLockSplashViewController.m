@@ -18,6 +18,7 @@
 
 - (instancetype)init {
     self = [super init];
+    
     if (self) {
         //__weak typeof(self) weakSelf = self;
         self.didFinishWithSuccess = ^(BOOL success, VENTouchLockSplashViewControllerUnlockType unlockType) {
@@ -42,6 +43,10 @@
         };
     }
     return self;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleDefault;
 }
 
 - (void)viewDidLoad {
